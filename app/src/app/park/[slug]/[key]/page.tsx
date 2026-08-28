@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { RouteMap } from '@/components/RouteMap'
 import { SiteFooter } from '@/components/SiteFooter'
 import { draftByKey } from '@/content/challenges'
 import { hasApprovedAgreement } from '@/lib/db'
@@ -7,6 +8,7 @@ import { evaluateGate, explainGate } from '@/lib/enrollment-gate'
 import { enrollmentOpen } from '@/lib/flags'
 import { displayName } from '@/lib/challenge-label'
 import { feet, kilometres, miles } from '@/lib/format'
+import { pointsFromGeoJson } from '@/lib/route-geometry'
 
 export const dynamic = 'force-dynamic'
 
@@ -35,6 +37,11 @@ export default async function ChallengePage({
           {displayName(challenge.name, challenge.distanceM)}
         </h1>
         <p className="mt-3 text-lg text-ink-muted">{challenge.summary}</p>
+
+        <RouteMap
+          route={pointsFromGeoJson(challenge.routeGeoJson)}
+          className="mt-8"
+        />
 
         <dl className="mt-8 grid grid-cols-2 gap-6 border-y border-line py-6 font-mono sm:grid-cols-3">
           {challenge.distanceM !== null && (

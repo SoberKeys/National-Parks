@@ -37,6 +37,12 @@ export type ChallengeDraft = {
   sourceTier: SourceTier
   sources: { label: string; url: string }[]
   fieldVerifiedAt: string | null
+  /**
+   * GeoJSON LineString, attached when a field recording exists. Null until
+   * then — the challenge page shows an honest "no route yet" state rather than
+   * a line we cannot vouch for.
+   */
+  routeGeoJson: unknown | null
   /** Concerns a reviewer must resolve. Rendered in the admin view, never publicly. */
   concerns: string[]
 }
@@ -69,6 +75,7 @@ export const CHALLENGE_DRAFTS: ChallengeDraft[] = [
       { label: 'NPS — Ocean Path with Island Explorer', url: 'https://home.nps.gov/thingstodo/hike-ocean-path-trail-with-island-explorer-bus.htm' },
     ],
     fieldVerifiedAt: null,
+    routeGeoJson: null,
     concerns: [],
   },
   {
@@ -93,6 +100,7 @@ export const CHALLENGE_DRAFTS: ChallengeDraft[] = [
       { label: 'NPS — Eagle Lake Loop', url: 'https://www.nps.gov/articles/000/eagle-lake-loop.htm' },
     ],
     fieldVerifiedAt: null,
+    routeGeoJson: null,
     concerns: [],
   },
   {
@@ -114,6 +122,7 @@ export const CHALLENGE_DRAFTS: ChallengeDraft[] = [
       { label: 'NPS — Big Meadows and Rose River area', url: 'https://www.nps.gov/shen/planyourvisit/upload/SHEN_BCTrip-Big_Meadows_and_Rose_River_B015-508.pdf' },
     ],
     fieldVerifiedAt: null,
+    routeGeoJson: null,
     concerns: [
       'BLOCKING: ~820 ft of gain over 3.3 mi on a steep, rocky waterfall ' +
         'descent is not an entry-level running route whatever the distance ' +
@@ -139,6 +148,7 @@ export const CHALLENGE_DRAFTS: ChallengeDraft[] = [
     sourceTier: 'T2',
     sources: [],
     fieldVerifiedAt: null,
+    routeGeoJson: null,
     concerns: [],
   },
   {
@@ -159,6 +169,7 @@ export const CHALLENGE_DRAFTS: ChallengeDraft[] = [
     sourceTier: 'T2',
     sources: [],
     fieldVerifiedAt: null,
+    routeGeoJson: null,
     concerns: [
       'BLOCKING: confirm current NPS flash-flood guidance and the live ' +
         'conditions page before this is offered to anyone. The trail follows ' +
