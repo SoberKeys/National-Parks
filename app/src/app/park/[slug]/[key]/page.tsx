@@ -5,6 +5,7 @@ import { draftByKey } from '@/content/challenges'
 import { hasApprovedAgreement } from '@/lib/db'
 import { evaluateGate, explainGate } from '@/lib/enrollment-gate'
 import { enrollmentOpen } from '@/lib/flags'
+import { displayName } from '@/lib/challenge-label'
 import { feet, kilometres, miles } from '@/lib/format'
 
 export const dynamic = 'force-dynamic'
@@ -30,7 +31,9 @@ export default async function ChallengePage({
         <Link href={`/park/${slug}`} className="font-mono text-xs text-ink-muted underline">
           ← {challenge.parkName}
         </Link>
-        <h1 className="mt-4 font-display text-4xl">{challenge.name}</h1>
+        <h1 className="mt-4 font-display text-4xl">
+          {displayName(challenge.name, challenge.distanceM)}
+        </h1>
         <p className="mt-3 text-lg text-ink-muted">{challenge.summary}</p>
 
         <dl className="mt-8 grid grid-cols-2 gap-6 border-y border-line py-6 font-mono sm:grid-cols-3">

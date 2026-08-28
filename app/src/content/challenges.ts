@@ -9,10 +9,16 @@ import type { SourceTier } from '@/lib/source-tier'
  * reaches a participant until someone has confirmed it against an NPS source
  * or run it and recorded a GPX.
  *
- * Distances are the real ones. Real trail geography does not produce clean 5K
- * and 10K numbers, and inventing a turnaround point to hit a round number puts
- * a participant somewhere no trailhead or junction exists.
- * Founder decision pending — see park-research/README.md.
+ * Distances are the real measured ones. Challenges carry a 5K or 10K label
+ * (founder decision: it is what runners read instantly), but a route earns one
+ * only if its real distance already falls within +/-15% — see
+ * src/lib/challenge-label.ts. We never move a turnaround to manufacture a
+ * label, because an invented turnaround is a place with no junction and
+ * nothing to see.
+ *
+ * Four of the five routes fit naturally. Ocean Path at ~7.08 km fits neither
+ * band, which is a route-selection gap rather than a labelling problem, and is
+ * recorded as an open question against it.
  */
 
 export type ChallengeDraft = {
@@ -53,6 +59,10 @@ export const CHALLENGE_DRAFTS: ChallengeDraft[] = [
       'Confirm distance and current condition against an NPS source',
       'Confirm any closed sections for the pilot window',
       'Confirm Sand Beach parking capacity and any seasonal reservation',
+      'LABEL GAP: at ~7.08 km this route is neither a 5K nor a 10K. Find an ' +
+        'Acadia Explorer route in the 4.25-5.75 km band rather than moving the ' +
+        'turnaround to manufacture one. A shorter carriage-road loop is the ' +
+        'likeliest candidate.',
     ],
     sourceTier: 'T2',
     sources: [

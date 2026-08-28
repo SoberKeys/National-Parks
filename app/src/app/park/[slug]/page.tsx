@@ -4,6 +4,7 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { draftsForPark } from '@/content/challenges'
 import { enrollmentOpen } from '@/lib/flags'
 import { feet, kilometres, miles } from '@/lib/format'
+import { displayName } from '@/lib/challenge-label'
 import { canPublish } from '@/lib/source-tier'
 
 const PARK_NAMES: Record<string, { name: string; state: string }> = {
@@ -42,7 +43,9 @@ export default async function ParkPage({
             return (
               <div key={d.key} className="rounded-sm border border-line bg-paper-raised p-6">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <p className="font-display text-xl">{d.name}</p>
+                  <p className="font-display text-xl">
+                    {displayName(d.name, d.distanceM)}
+                  </p>
                   <p className="font-mono text-xs tracking-widest text-ink-muted uppercase">
                     {d.tier}
                   </p>
@@ -87,9 +90,10 @@ export default async function ParkPage({
         </div>
 
         <p className="mt-10 text-sm text-ink-muted">
-          Distances are the real length of each route. We do not trim a trail to
-          make it a round number — an invented turnaround point is a place no
-          junction exists.
+          A route is called a 5K or a 10K only when it genuinely measures one.
+          We do not trim a trail to make a round number — an invented turnaround
+          is a place with no junction and nothing to see. The real distance is
+          always shown next to the name.
         </p>
       </main>
       <SiteFooter />

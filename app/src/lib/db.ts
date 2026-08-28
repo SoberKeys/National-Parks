@@ -193,3 +193,117 @@ export async function pendingSubmissions(): Promise<QueueItem[]> {
     return []
   }
 }
+
+/**
+ * Resolve an unlock token to its public achievement.
+ *
+ * The unlock link goes in an email, so the token is longer than the public one.
+ * It resolves to the same PublicAchievement — the unlock page is a private
+ * moment, but it still has no business handling coordinates.
+ */
+export async function achievementByUnlockToken(
+  token: string,
+): Promise<(PublicAchievement & { kitOffered: boolean }) | null> {
+  if (!publicEnv.supabaseUrl) return null
+  const { data } = await db()
+    .from('completions')
+    .select('public_token')
+    .eq('unlock_token', token)
+    .maybeSingle()
+  if (!data) return null
+
+  const achievement = await publicAchievementByToken(
+    (data as { public_token: string }).public_token,
+  )
+  return achievement ? { ...achievement, kitOffered: true } : null
+}
+
+/** Record a survey response. One per participant per survey per completion. */
+export async function saveSurvey(input: {
+  publicToken: string
+  survey: 'emotion_48h' | 'second_park_21d'
+  payload: Record<string, unknown>
+}): Promise<boolean> {
+  if (!publicEnv.supabaseUrl) return false
+  const { data: completion } = await db()
+    .from('completions')
+    .select('id, participant_id')
+    .eq('public_token', input.publicToken)
+    .maybeSingle()
+  if (!completion) return false
+
+  const row = completion as { id: string; participant_id: string }
+  const { error } = await db()
+    .from('survey_responses')
+    .upsert(
+      {
+        participant_id: row.participant_id,
+        completion_id: row.id,
+        survey: input.survey,
+        payload: input.payload,
+      },
+      { onConflict: 'participant_id,survey,completion_id' },
+    )
+  return !error
+}
+
+/**
+ * Record an observable action toward a second park (Round 2, Amendment 6).
+ *
+ * Tier matters and is not the caller's guess: a self-reported hard action
+ * without specifics is recorded as soft, because "yeah I looked at flights"
+ * is not evidence of anything.
+ */
+export async function recordSecondParkAction(input: {
+  participantId: string
+  action: string
+  tier: 'soft' | 'hard'
+  source: 'instrumented' | 'self_reported'
+  parkSlug?: string | null
+  detail?: string | null
+}): Promise<void> {
+  if (!publicEnv.supabaseUrl) return
+  const tier =
+    input.tier === 'hard' &&
+    input.source === 'self_reported' &&
+    !(input.detail && input.detail.trim().length >= 10)
+      ? 'soft'
+      : input.tier
+
+  await db().from('second_park_actions').insert({
+    participant_id: input.participantId,
+    action: input.action,
+    tier,
+    source: input.source,
+    park_slug: input.parkSlug ?? null,
+    detail: input.detail ?? null,
+  })
+}
+
+/** Participant behind a completion, for pricing and order attribution. */
+export async function participantForCompletion(publicToken: string): Promise<{
+  participantId: string
+  email: string
+  priceCohort: PriceCohort | null
+} | null> {
+  if (!publicEnv.supabaseUrl) return null
+  const { data } = await db()
+    .from('completions')
+    .select('participant_id, participants ( email )')
+    .eq('public_token', publicToken)
+    .maybeSingle()
+  if (!data) return null
+
+  const row = data as unknown as {
+    participant_id: string
+    participants: { email: string } | null
+  }
+  const email = row.participants?.email
+  if (!email) return null
+
+  return {
+    participantId: row.participant_id,
+    email,
+    priceCohort: await storedPriceCohortFor(email),
+  }
+}

@@ -7,12 +7,12 @@ import {
 } from '@/lib/pricing'
 
 /**
- * Assigns the sticky price cohort on first visit. Doing it in middleware means
+ * Assigns the sticky price cohort on first visit. Doing it here means
  * every entry point gets one — the landing page, a shared achievement page, a
  * challenge page — so a visitor cannot slip into the funnel unassigned and
  * later be shown an inconsistent price.
  */
-export function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const response = NextResponse.next()
   const existing = request.cookies.get(PRICE_COOKIE)?.value
 
