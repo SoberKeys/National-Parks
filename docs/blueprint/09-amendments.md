@@ -133,6 +133,31 @@ body-of-evidence interpretation.
 
 ---
 
+## ROUND 3 — Scheduling
+*Issued after Day 1 build-out. Overrides Rounds 1 and 2 where they conflict.*
+
+**1. Dates decoupled.** Complete the full build-out first, then set a date to push for. The validation
+window keeps its 45-day shape and its three gates, but all Day numbers are **relative offsets from an
+unscheduled Day 1**.
+
+**Consequence, and the important part:** every dependency gate in Rounds 1 and 2 still holds, because
+those gates are on *state*, not on dates:
+
+- Challenge enrollment stays closed until counsel approves the participant agreement.
+- No Wave-2 physical inventory before a Gate 1 GO.
+- No NPS contact before counsel reviews the operating model.
+- No route publishes before it is field-verified.
+- Budget authorization is unchanged.
+
+Removing the calendar pressure strengthens these gates rather than weakening them: the main reason to
+cut a corner — preserving a date — no longer exists.
+
+**Setting Day 1** is governed by three inputs, documented in `docs/validation/calendar.md`: park
+seasonality (Zion binds), the federal appropriations position for the intended window, and counsel
+turnaround on the participant agreement.
+
+---
+
 ## Gate reporting obligation
 
 At each Gate the founder is presented with, in this order:

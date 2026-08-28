@@ -1,205 +1,132 @@
-# 45-DAY WORKING CHECKLIST
+# BUILD SEQUENCE & LAUNCH CHECKLIST
 
-**Day 1 = Tue Sep 1, 2026 · Day 45 = Thu Oct 15, 2026**
-Owners: **F** founder · **B** build · **C** contractors · **L** counsel
-Full rationale in [`PLAN.md`](PLAN.md). Tick items as they complete; do not delete them.
+> **Dates are deliberately unset.** The founder has decoupled the validation window from fixed dates:
+> we complete the full build-out first, then choose a start date. See "Setting the date" below.
+>
+> The 45-day *shape* of the pilot is unchanged, and so are the three gates. What changed is that
+> Day 1 is now "the day we decide to start", not a calendar date.
 
 ---
 
-## WEEK 1 · Sep 1–7 — Foundation and the legal floor
+## PART 1 — BUILD-OUT (no dates; sequence-driven)
 
-**Day 1 · Tue Sep 1**
-- [ ] **F** LLC filing + EIN
-- [ ] **F** Placeholder domain + email
-- [ ] **F** Counsel shortlist begun (3 candidates)
-- [ ] **F** Warm-network outreach starts — highest-conversion channel, start today
-- [x] **B** Repo init; blueprint, plan, amendments and ADRs committed
-- [x] **B** Next.js + Supabase client skeleton *(code done; hosted Vercel + Supabase projects need founder accounts)*
-- [x] **B** PostHog + Sentry wired *(code done; DSN and project key need founder accounts)*
+Build order is dependency-driven. Tick as completed.
 
-**Day 2 · Wed Sep 2**
-- [ ] **F** Business bank application
-- [ ] **F** Stripe onboarding started
-- [ ] **B** Landing-page structure (copy placeholder)
-- [ ] **B** Waitlist schema + form
+### B1 · Foundation
+- [x] Repo, docs, ADRs, governing plan
+- [x] Next.js + Tailwind + TypeScript, lint/typecheck/build clean
+- [x] Brand abstraction (`src/config/brand.ts`)
+- [x] Phase gate (`src/lib/flags.ts`) — defaults closed, throws rather than returning false
+- [x] Supabase clients (browser/server/service-role)
+- [x] PostHog + Sentry
+- [ ] Database schema + migrations
+- [ ] Park dataset pipeline (63 parks, sourced from the NPS Data API — never hand-typed)
+- [ ] Seed data for the three validation parks
 
-**Day 3 · Thu Sep 3**
-- [ ] **F** Counsel outreach sent — **participant agreement flagged as Deliverable #1**
-- [ ] **B** Concept map: 63 centroids, 3 first parks
+### B2 · Phase 1 surfaces (launchable without counsel)
+- [ ] Landing page (structure + copy per `PLAN.md` §5)
+- [ ] Interactive concept map — 63 parks, 3 first
+- [ ] Waitlist funnel with **three-way cohort assignment**
+- [ ] Sticky price-cohort assignment ($29 / $39 / $49)
+- [ ] Save-a-park control (feeds Second-Park Action Rate)
+- [ ] Referral links (per-participant, feeds Stage 7 and hard actions)
+- [ ] Park + challenge pages in **informational mode**
+- [ ] Founding Collector checkout (Stripe, $99 one-time, cap 250)
+- [ ] Transactional email
 
-**Day 4 · Fri Sep 4**
-- [ ] **F** Counsel intake scheduled
-- [ ] **F** Route research against current NPS sources (T1) for all three parks
-- [ ] **B** Three-way cohort question live in the waitlist funnel
-- [ ] **F** 📝 Weekly memo
+### B3 · Phase 2 surfaces (built now, gated closed until counsel approves)
+- [ ] Participant agreement acceptance + versioning
+- [ ] Challenge enrollment
+- [ ] GPX / FIT / TCX upload
+- [ ] Verification console — decision support, human decides
+- [ ] Unlock experience
+- [ ] Share-card generation (A/B: counter vs no counter)
+- [ ] Public achievement pages (A/B/C variants, **zero coordinates**)
+- [ ] Completion Kit checkout at the participant's assigned price
+- [ ] 48-hour and 21-day surveys
 
-**Day 5 · Sat Sep 5**
-- [ ] **F** Park photography sourced (NPS public domain preferred)
-- [ ] **B** Landing copy; challenge page templates in Phase-1 informational mode
+### B4 · Instrumentation & admin
+- [ ] Metrics dashboard — the 7-stage funnel, cohorts separated
+- [ ] Cash ledger surface
+- [ ] Route kill-switch
 
-**Day 6 · Sun Sep 6**
-- [ ] **B** Sticky price-cohort assignment ($29/$39/$49) built and tested
-- [ ] **B** Save-a-park + referral-link plumbing
+### B5 · Verification & quality
+- [ ] GPX parser test suite (real exports from ≥3 device types)
+- [ ] Money audit in Stripe test mode — all three prices, sticky assignment, refunds, the 250 cap
+- [ ] 🔒 **Privacy audit** — view-source, JSON payload and OG image of a live `/a/` page confirmed to
+      contain zero coordinates. **Blocking.**
+- [ ] Phase-gate audit — enrollment routes and `/submit` reject server-side while the flag is closed
 
-**Day 7 · Mon Sep 7**
-- [ ] **F/L** **Counsel intake call** — agreement scoped as fixed fee, 5-business-day turnaround
-- [ ] **B** Landing page soft-live (unlisted); end-to-end waitlist test
+### B6 · Content (blocks launch, not build)
+- [ ] Field-verify every route in all three parks (T1 or T3 — see `park-research/README.md`)
+- [ ] Resolve the Shenandoah Explorer difficulty concern
+- [ ] Resolve Zion flash-flood and heat guidance at T1
+- [ ] Founder decision: route-named challenges vs 5K/10K labels
 
-## WEEK 2 · Sep 8–14 — Phase 1 live; build Phase 2 behind the gate
+---
 
-**Day 8 · Tue Sep 8**
-- [ ] 🚀 **PHASE 1 PUBLIC** — landing, map, waitlist, Founding Collector. **No challenge enrollment**
-- [ ] **F/C** Illustrator briefed (3 park illustrations + founder mark)
+## PART 2 — LAUNCH READINESS (must all be true before Day 1 is set)
 
-**Day 9 · Wed Sep 9**
-- [ ] **F** Reddit mod messages · Facebook group posts
-- [ ] **B** Verification console v1 (built, dormant)
+| # | Condition | Owner |
+|---|---|---|
+| 1 | Build-out B1–B5 complete and verified | B |
+| 2 | Legal entity, EIN, business bank account, Stripe live | F |
+| 3 | Counsel engaged; **participant agreement approved** | F / L |
+| 4 | Every published route field-verified at T1 or T3 | F |
+| 5 | Wave-1 physical artwork ready and printer identified | F / C |
+| 6 | Hosted Vercel, Supabase, PostHog, Sentry projects live | F |
+| 7 | Appropriations status checked for the intended window | F |
+| 8 | Seasonality checked per park for the intended window | F |
 
-**Day 10 · Thu Sep 10**
-- [ ] **F** Running-club emails ×3 regions · Instagram DMs begin
-- [ ] **B** Submit page + `.gpx/.fit/.tcx` parsing (dormant)
+## Setting the date
 
-**Day 11 · Fri Sep 11**
-- [ ] **F** Field verification — park 1
-- [ ] **B** Unlock prototype + share-card generator
-- [ ] **F** 📝 Weekly memo
+Once build-out is done, pick Day 1 against three real-world constraints:
 
-**Day 12 · Sat Sep 12**
-- [ ] **F** Micro-creator outreach (8–12) — **the Cohort-C engine**
-- [ ] **B** Paid test launched ($200 of $500)
-- [ ] **B** `/a/[token]` page + 3 variants
+1. **Seasonality.** Acadia and Shenandoah are strongest late spring through early autumn.
+   **Zion is materially safer outside the summer heat and the late-summer monsoon.** If the three parks
+   cannot share one ideal window, stagger enrollment per park rather than compromising on Zion.
+2. **Federal appropriations.** A lapse closes or partially closes parks — the 2025 lapse ran 43 days.
+   Check the funding position for the intended window, and avoid straddling a funding deadline with the
+   high-value completion fortnight.
+3. **Counsel turnaround.** The participant agreement gates enrollment entirely. Do not set Day 1 until
+   it is approved, or the pilot starts with its main activity shut.
 
-**Day 13 · Sun Sep 13**
-- [ ] **F** Wave 2: **quotes, proofs, samples, lead times ONLY — no inventory** (Amendment 3)
-- [ ] **B** Metrics dashboard v1
+---
 
-**Day 14 · Mon Sep 14**
-- [ ] **B** Stripe live: Founding Collector + kit preorder
-- [ ] **F** Operating Model Description drafted
-- [ ] **B** Gate 1 data pulled
+## PART 3 — THE 45-DAY PILOT (shape, once Day 1 is set)
 
-## 🚦 GATE 1 · Day 15 · Tue Sep 15 — interest and readiness only
-- [ ] **F** Gate 1 report (8 sections) + decision + written rationale
-- [ ] **F** Operating Model to counsel
-- [ ] **F** Wave-2 inventory decision — **only if GO**
+| Days | Focus |
+|---|---|
+| 1–7 | Soft launch, final route checks, warm-network recruitment |
+| 8–14 | Phase 1 public. Channel recruitment. Founding Collector live |
+| **15** | 🚦 **GATE 1** — interest and readiness. Wave-2 inventory authorized only on GO |
+| 15–21 | Phase 2 opens. Enrollment emails to the whole waitlist. First interviews |
+| 22–28 | Peak completion volume. Wave-1 kits mailed. Privacy audit re-run against live data |
+| **30** | 🚦 **GATE 2** — do people complete, and does it move them |
+| 29–35 | Interviews 9–12. NPS package drafted, held pending counsel clearance |
+| 36–42 | Evidence assembly. 21-day surveys. Labelled GPX corpus archived |
+| **45** | 🚦 **GATE 3** — BUILD / MODIFY / STOP |
 
-## WEEK 3 · Sep 15–21 — Open enrollment, convert hard
+**Gate reports** deliver the eight sections in `docs/blueprint/09-amendments.md`, then stop for the
+founder decision.
 
-**Day 16 · Wed Sep 16**
-- [ ] 🎯 **Counsel approves agreement → PHASE 2 OPENS** (`NEXT_PUBLIC_ENROLLMENT_OPEN=true`)
-- [ ] **B** Cohort-segmented enrollment emails to the entire waitlist, same day
-- [ ] ⚠️ **If not approved today: escalate** — expedited review or a second firm for this one document
+### Rhythm during the pilot
+| Cadence | Ritual |
+|---|---|
+| Daily | Clear the verification queue (24h SLA is a promise) · reply to every participant personally · 15–30 recruitment touches · log verbatim quotes |
+| Monday | Week plan; review all 7 stages; pick the week's most important question |
+| Thursday | 2–4 participant interviews |
+| Friday | 📝 Written weekly memo: numbers, quotes, what changed my mind, what I'd cut |
+| Sunday | Fulfillment block |
 
-**Day 17 · Thu Sep 17**
-- [ ] **F** First 3 interviews
-- [ ] **F** Field verification — park 2
+---
 
-**Day 18 · Fri Sep 18**
-- [ ] **F/C** Wave 1 print files sent (3–5 day turnaround)
-- [ ] **F** 📝 Weekly memo
+## Standing gates (independent of any date)
 
-**Day 19 · Sat Sep 19** — weekend #1 of the high-value window
-- [ ] **F** Completion push
-
-**Day 20 · Sun Sep 20**
-- [ ] **F** Queue clearing · insurance quotes chased · research journal consolidated
-
-**Day 21 · Mon Sep 21**
-- [ ] **B** Share-card A/B and `/a/` A/B/C live
-- [ ] **B** 48h and 21-day survey automation live
-
-## WEEK 4 · Sep 22–28 — Peak volume before the funding deadline
-
-**Day 22 · Tue Sep 22**
-- [ ] **F** Recruitment push #2, framed around completing before Sep 30
-- [ ] ⚠️ **If Phase 2 has not opened: re-baseline the window with the founder today**
-
-**Day 23 · Wed Sep 23**
-- [ ] **F** Wave 1 materials arrive; packing setup
-
-**Day 24 · Thu Sep 24**
-- [ ] **F** Interviews 4–8 — **cohort re-classification happens here**
-- [ ] **F** Field verification — park 3
-
-**Day 25 · Fri Sep 25**
-- [ ] **F** First Wave 1 kits mailed
-- [ ] **F** Founding Collector push to waitlist
-- [ ] **F** 📝 Weekly memo
-
-**Day 26 · Sat Sep 26**
-- [ ] 🔒 **B** **Privacy audit — BLOCKING.** View-source, JSON payload and OG image of a live `/a/` page
-      confirmed to contain zero coordinates
-- [ ] **F** Weekend completion push
-
-**Day 27 · Sun Sep 27**
-- [ ] **F** Fulfillment · queue clearing
-
-**Day 28 · Mon Sep 28**
-- [ ] **B** Price-cohort data pulled
-- [ ] **F** Interim analysis written
-- [ ] **B** Gate 2 data pulled
-
-## 🚦 GATE 2 · Day 30 · Wed Sep 30 — also the funding deadline
-- [ ] **F** Gate 2 report (8 sections) + decision + written rationale
-- [ ] **F** Contingency C-1 armed
-
-## WEEK 5 · Sep 29–Oct 5 — Deadline, then contingency
-
-**Day 29 · Tue Sep 29**
-- [ ] **F** Final pre-deadline push; every outstanding enrollee contacted personally
-
-**Day 31 · Thu Oct 1**
-- [ ] ⚠️ **Shutdown check.** If a lapse: activate C-1, notify all participants, pause completions,
-      continue everything else
-
-**Day 32 · Fri Oct 2**
-- [ ] **F** Interviews 9–12
-- [ ] **F** NPS package drafting begins
-- [ ] **F** 📝 Weekly memo
-
-**Day 33 · Sat Oct 3**
-- [ ] **F** Completions continue if parks are open
-- [ ] **B** First 21-day surveys fire
-
-**Day 34 · Sun Oct 4**
-- [ ] **F** Fulfillment · queue clearing
-
-**Day 35 · Mon Oct 5**
-- [ ] **B/F** Cohort A / B / C analysis, reported separately
-- [ ] **B/F** Second-park action deep dive
-
-## WEEK 6 · Oct 6–12 — Evidence assembly
-
-**Day 36 · Tue Oct 6**
-- [ ] **F** NPS package complete, **held pending counsel clearance**
-- [ ] **F** Wave 2 status check
-
-**Day 37 · Wed Oct 7**
-- [ ] **F** Interviews 13–15; synthesis begins
-
-**Day 38 · Thu Oct 8**
-- [ ] **B/F** Full 7-stage analysis across all three cohorts
-
-**Day 39 · Fri Oct 9**
-- [ ] **B/F** Share-card and public-page results written up
-- [ ] **F** 📝 Weekly memo
-
-**Day 40 · Sat Oct 10**
-- [ ] **F** Founding Collector park-order survey sent and **result published**
-
-**Day 41 · Sun Oct 11**
-- [ ] **F** Final fulfillment wave; all Wave 1 mailed
-
-**Day 42 · Mon Oct 12**
-- [ ] **B** **Labelled GPX corpus documented and archived** for the future engine
-
-## WEEK 7 · Oct 13–15 — Decision
-
-**Day 43 · Tue Oct 13**
-- [ ] **B/F** Validation Report drafted — 7 stages, 3 cohorts, all quotes, all limitations
-
-**Day 44 · Wed Oct 14**
-- [ ] **F/L** Counsel memo integrated; NPS send/hold decision; report finalized
-
-## 🚦 GATE 3 · Day 45 · Thu Oct 15 — BUILD / MODIFY / STOP
-- [ ] **F** Gate 3 report (8 sections) + decision + written reasoning
+- **Enrollment stays closed** until counsel approves the participant agreement. Not negotiable to
+  preserve a schedule (Round 2, Amendment 2 · ADR-0008).
+- **No Wave-2 physical inventory** before a Gate 1 GO (Round 2, Amendment 3).
+- **No NPS contact** — including informal — before counsel reviews the operating model
+  (Round 1, Amendment 11).
+- **No route publishes** until it is field-verified at T1 or T3.
+- **Budget:** $10,000 authorized · escalate at a projected $9,500 · $12,000 requires explicit approval.
