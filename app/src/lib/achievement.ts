@@ -1,3 +1,5 @@
+import { fitRoute, pointsFromGeoJson, routeAspect } from '@/lib/route-geometry'
+
 /**
  * THE PUBLIC PROJECTION.
  *
@@ -16,6 +18,21 @@
  * The type is deliberately narrow and the projection deliberately explicit:
  * a spread of the internal record would silently leak the next field somebody
  * adds. Adding a field here should feel like a decision, because it is one.
+ *
+ * ON THE ROUTE SHAPE
+ * The card and the page draw the PUBLISHED ROUTE, never the participant's
+ * recorded track. Two reasons it is safe, and the second is the one that
+ * matters:
+ *
+ *   1. The route is public information we published ourselves, and the card
+ *      already names the park and the date. The shape adds nothing.
+ *   2. What is stored here is a pre-projected SVG path in abstract drawing
+ *      space, with its origin at the route's own first point and an arbitrary
+ *      scale. No latitude or longitude survives the projection, so there is no
+ *      georeference to recover even in principle.
+ *
+ * The projection function never receives a track, so drawing one is not a
+ * mistake that can be made here — it would require changing this type.
  */
 
 export type PublicAchievement = {
@@ -37,6 +54,22 @@ export type PublicAchievement = {
   verifiedOn: string
   /** A = achievement only, B = nearest parks CTA, C = credibility framing. */
   variant: 'A' | 'B' | 'C'
+  /**
+   * The PUBLISHED route, pre-projected into abstract drawing space. Never the
+   * participant's track, and carrying no coordinates of any kind.
+   */
+  routeShape: RouteShape | null
+}
+
+export type RouteShape = {
+  /** SVG path in a local, unreferenced coordinate space. */
+  path: string
+  width: number
+  height: number
+  /** True when start and finish coincide — one marker, not two. */
+  endsCoincide: boolean
+  start: { x: number; y: number } | null
+  finish: { x: number; y: number } | null
 }
 
 export type InternalCompletion = {
@@ -54,6 +87,11 @@ export type InternalCompletion = {
   displayName?: string | null
   verifiedAt: string
   variant: 'A' | 'B' | 'C'
+  /**
+   * GeoJSON for the challenge's PUBLISHED route. Projected here into drawing
+   * space; the coordinates never leave this function.
+   */
+  publishedRouteGeoJson?: unknown
   // Fields below exist on the internal record and must never be projected.
   participantEmail?: string
   homeState?: string | null
@@ -95,6 +133,7 @@ export function toDisplayName(raw: string | null | undefined): string | null {
 export function toPublicAchievement(c: InternalCompletion): PublicAchievement {
   // Explicit field-by-field. Never a spread of the internal record.
   return {
+    routeShape: projectPublishedRoute(c.publishedRouteGeoJson),
     token: c.publicToken,
     parkName: c.parkName,
     parkStates: c.parkStates,
@@ -115,5 +154,50 @@ export function toPublicAchievement(c: InternalCompletion): PublicAchievement {
 export const PUBLIC_ACHIEVEMENT_KEYS = [
   'token', 'parkName', 'parkStates', 'challengeName', 'completedOn',
   'durationS', 'distanceM', 'elevationGainM', 'ordinal', 'collectionSize',
-  'displayName', 'verifiedOn', 'variant',
+  'displayName', 'verifiedOn', 'variant', 'routeShape',
 ] as const
+
+// ── Route shape projection ───────────────────────────────────────────────────
+
+const SHAPE_W = 320
+/**
+ * The drawing box follows the route's own proportions.
+ *
+ * A fixed landscape box shrinks a portrait route — a canyon out-and-back — to
+ * a thin sliver, which throws away the recognition the shape exists to
+ * provide. Clamped so nothing becomes a letterbox or a tower.
+ */
+const SHAPE_MIN_ASPECT = 0.55
+const SHAPE_MAX_ASPECT = 1.35
+
+/**
+ * Project the published route into abstract drawing space.
+ *
+ * Deliberately takes GeoJSON for the PUBLISHED route and nothing else — there
+ * is no parameter through which a participant's recorded track could arrive.
+ *
+ * The output carries no latitude, longitude, bearing or scale: the origin is
+ * the route's own first point and the scale is whatever fits the box. The
+ * shape is recognisable; the location is not recoverable.
+ */
+export function projectPublishedRoute(geo: unknown): RouteShape | null {
+  const points = pointsFromGeoJson(geo)
+  if (points.length < 2) return null
+
+  const aspect = routeAspect(points) ?? 0.7
+  const height = Math.round(
+    SHAPE_W * Math.min(SHAPE_MAX_ASPECT, Math.max(SHAPE_MIN_ASPECT, aspect)),
+  )
+
+  const fitted = fitRoute(points, { width: SHAPE_W, height, padding: 14 })
+  if (!fitted.path) return null
+
+  return {
+    path: fitted.path,
+    width: SHAPE_W,
+    height,
+    endsCoincide: fitted.endsCoincide,
+    start: fitted.start,
+    finish: fitted.endsCoincide ? null : fitted.finish,
+  }
+}

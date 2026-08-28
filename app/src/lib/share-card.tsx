@@ -16,6 +16,10 @@ import { duration, feet, miles } from '@/lib/format'
  * finiteness of the set what makes a stranger click?
  *   A — "01 / 63" large and prominent
  *   B — the identical card with the counter removed
+ *
+ * The route drawn here is the PUBLISHED route, never the participant's track,
+ * and it arrives already projected into abstract drawing space with no
+ * georeference. See the note on the route shape in lib/achievement.ts.
  */
 
 export const SIZES = {
@@ -84,11 +88,56 @@ export function renderShareCard(
         UNLOCKED
       </div>
 
-      <div style={{ display: 'flex', fontSize: px(30), color: MUTED, marginTop: px(48) }}>
+      {/*
+        The route silhouette. This is the recognition moment — a runner who has
+        done this trail knows the shape on sight. It is the published route, so
+        it says nothing about where this particular person was.
+      */}
+      {a.routeShape && (
+        <svg
+          width={px(a.routeShape.width * 1.35)}
+          height={px(a.routeShape.height * 1.35)}
+          viewBox={`0 0 ${a.routeShape.width} ${a.routeShape.height}`}
+          style={{ marginTop: px(30) }}
+        >
+          <path
+            d={a.routeShape.path}
+            fill="none"
+            stroke={ACCENT}
+            strokeWidth={4}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+          {a.routeShape.start && (
+            <circle
+              cx={a.routeShape.start.x}
+              cy={a.routeShape.start.y}
+              r={7}
+              fill={PAPER}
+              stroke={INK}
+              strokeWidth={3}
+            />
+          )}
+          {a.routeShape.finish && (
+            <rect
+              x={a.routeShape.finish.x - 6}
+              y={a.routeShape.finish.y - 6}
+              width={12}
+              height={12}
+              fill={INK}
+            />
+          )}
+        </svg>
+      )}
+
+      <div style={{
+        display: 'flex', fontSize: px(30), color: MUTED,
+        marginTop: px(a.routeShape ? 26 : 48),
+      }}>
         {a.challengeName}
       </div>
 
-      <div style={{ display: 'flex', gap: px(64), marginTop: px(40) }}>
+      <div style={{ display: 'flex', gap: px(64), marginTop: px(a.routeShape ? 30 : 40) }}>
         {stats.map((s) => (
           <div key={s.label} style={{
             display: 'flex', flexDirection: 'column', alignItems: 'center',
@@ -107,7 +156,7 @@ export function renderShareCard(
       {variant === 'A' && (
         <div style={{
           display: 'flex', flexDirection: 'column', alignItems: 'center',
-          marginTop: px(64), paddingTop: px(40),
+          marginTop: px(a.routeShape ? 44 : 64), paddingTop: px(36),
           borderTop: `${px(2)}px solid ${LINE}`, width: '70%',
         }}>
           <div style={{ display: 'flex', fontSize: px(110), letterSpacing: px(4) }}>
@@ -127,7 +176,7 @@ export function renderShareCard(
       <div style={{
         display: 'flex', alignItems: 'center', gap: px(10),
         fontSize: px(22), color: MUTED,
-        marginTop: variant === 'A' ? px(56) : px(80), letterSpacing: px(2),
+        marginTop: variant === 'A' ? px(44) : px(72), letterSpacing: px(2),
       }}>
         <svg width={px(20)} height={px(20)} viewBox="0 0 20 20" fill="none">
           <path

@@ -113,7 +113,7 @@ export async function publicAchievementByToken(
        distance_m, elevation_gain_m, page_variant,
        verifications ( decided_at ),
        participants ( display_name ),
-       challenges ( name, parks ( name, states ) )`,
+       challenges ( name, route_geojson, parks ( name, states ) )`,
     )
     .eq('public_token', token)
     .maybeSingle()
@@ -132,6 +132,7 @@ export async function publicAchievementByToken(
     participants: { display_name: string | null } | null
     challenges: {
       name: string
+      route_geojson: unknown
       parks: { name: string; states: string[] } | null
     } | null
   }
@@ -148,6 +149,9 @@ export async function publicAchievementByToken(
     ordinal: row.ordinal_for_participant,
     collectionSize: COLLECTION_SIZE,
     displayName: row.participants?.display_name ?? null,
+    // The CHALLENGE's published route. The activity track is never selected
+    // here and has no path into the projection.
+    publishedRouteGeoJson: row.challenges?.route_geojson ?? null,
     verifiedAt: row.verifications?.decided_at ?? row.completed_on,
     variant: row.page_variant,
   })

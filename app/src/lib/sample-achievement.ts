@@ -30,6 +30,21 @@ export const SAMPLE_INTERNAL: InternalCompletion = {
   startLon: -113.0263,
   startedAt: '2026-05-14T13:47:22.000Z',
   trackPoints: [{ lat: 37.2003, lon: -113.0263 }],
+  // The published route. Real coordinates go in, and the projection is what
+  // strips the georeference — which is precisely what the privacy audit checks.
+  publishedRouteGeoJson: {
+    type: 'LineString',
+    coordinates: Array.from({ length: 120 }, (_, i) => {
+      const t = i / 119
+      const u = t < 0.5 ? t * 2 : (1 - t) * 2
+      const side = t < 0.5 ? 1 : -1
+      return [
+        -113.032 + 0.0052 * Math.sin(u * 5.5) + u * 0.0031 + side * 0.00022,
+        37.2 + u * 0.0165 + 0.0011 * Math.sin(u * 9) + side * 0.00018,
+        1178 + u * 22,
+      ]
+    }),
+  },
 }
 
 export const sampleAchievement = (variant: 'A' | 'B' | 'C' = 'C') =>

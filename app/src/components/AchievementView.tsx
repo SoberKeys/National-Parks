@@ -24,7 +24,41 @@ export function AchievementView({ a }: { a: PublicAchievement }) {
           Unlocked
         </p>
 
-        <p className="mt-8 text-lg">{a.challengeName}</p>
+        {/*
+          The published route, not this participant's track. Same reasoning as
+          the share card: recognisable shape, no recoverable location.
+        */}
+        {a.routeShape && (
+          <svg
+            viewBox={`0 0 ${a.routeShape.width} ${a.routeShape.height}`}
+            className="mx-auto mt-8 block h-auto w-full max-w-xs"
+            role="img"
+            aria-label={`Route shape for ${a.challengeName}`}
+          >
+            <path
+              d={a.routeShape.path}
+              fill="none"
+              stroke="var(--color-accent)"
+              strokeWidth={3}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            {a.routeShape.start && (
+              <circle
+                cx={a.routeShape.start.x} cy={a.routeShape.start.y} r={6}
+                fill="var(--color-paper-raised)" stroke="var(--color-ink)" strokeWidth={2}
+              />
+            )}
+            {a.routeShape.finish && (
+              <rect
+                x={a.routeShape.finish.x - 5} y={a.routeShape.finish.y - 5}
+                width={10} height={10} fill="var(--color-ink)"
+              />
+            )}
+          </svg>
+        )}
+
+        <p className={`text-lg ${a.routeShape ? 'mt-4' : 'mt-8'}`}>{a.challengeName}</p>
 
         <dl className="mt-6 flex flex-wrap justify-center gap-x-10 gap-y-4 font-mono">
           {a.durationS !== null && (

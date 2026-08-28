@@ -107,3 +107,143 @@ describe('toDayPrecision', () => {
     }
   })
 })
+
+describe('the published route shape', () => {
+  // A recognisable trail: a meander with a clear bend.
+  const publishedRoute = {
+    type: 'LineString',
+    coordinates: Array.from({ length: 60 }, (_, i) => {
+      const t = i / 59
+      return [
+        -113.032 + t * 0.006 + 0.0018 * Math.sin(t * 7),
+        37.2 + t * 0.013,
+        1180 + t * 20,
+      ]
+    }),
+  }
+
+  const withRoute = toPublicAchievement({
+    ...internal,
+    publishedRouteGeoJson: publishedRoute,
+  })
+
+  it('draws the published route', () => {
+    expect(withRoute.routeShape).not.toBeNull()
+    expect(withRoute.routeShape!.path).toMatch(/^M[\d.]+,[\d.]+L/)
+  })
+
+  // The property that makes this safe at all: the projection destroys the
+  // georeference. Recognisable shape, unrecoverable location.
+  //
+  // Asserted against the actual numbers rather than by substring search — a
+  // drawing coordinate of 137.25 contains "37.2" and would fail a naive text
+  // check while leaking nothing.
+  it('emits no value that could be one of the input coordinates', () => {
+    const inputs = publishedRoute.coordinates.flatMap(([lon, lat]) => [lon, lat])
+    const emitted = JSON.stringify(withRoute.routeShape)
+      .match(/-?\d+(\.\d+)?/g)!
+      .map(Number)
+
+    for (const value of emitted) {
+      for (const input of inputs) {
+        expect(
+          Math.abs(value - input),
+          `emitted ${value} is indistinguishable from input coordinate ${input}`,
+        ).toBeGreaterThan(1e-4)
+      }
+    }
+  })
+
+  it('emits only non-negative values, so no longitude can survive', () => {
+    const emitted = JSON.stringify(withRoute.routeShape)
+      .match(/-?\d+(\.\d+)?/g)!
+      .map(Number)
+    expect(emitted.every((n) => n >= 0)).toBe(true)
+  })
+
+  it('keeps every drawn point inside the drawing box', () => {
+    const shape = withRoute.routeShape!
+    const pairs = shape.path.slice(1).split('L').map((p) => p.split(',').map(Number))
+    for (const [x, y] of pairs) {
+      expect(x).toBeGreaterThanOrEqual(0)
+      expect(x).toBeLessThanOrEqual(shape.width)
+      expect(y).toBeGreaterThanOrEqual(0)
+      expect(y).toBeLessThanOrEqual(shape.height)
+    }
+  })
+
+  it('is null when the challenge has no published route', () => {
+    expect(toPublicAchievement(internal).routeShape).toBeNull()
+    expect(toPublicAchievement({ ...internal, publishedRouteGeoJson: null }).routeShape)
+      .toBeNull()
+    expect(toPublicAchievement({ ...internal, publishedRouteGeoJson: { type: 'Point', coordinates: [1, 2] } }).routeShape)
+      .toBeNull()
+  })
+
+  it('collapses coinciding ends to a single marker', () => {
+    const outAndBack = {
+      type: 'LineString',
+      coordinates: [
+        ...publishedRoute.coordinates,
+        ...[...publishedRoute.coordinates].reverse().slice(1),
+      ],
+    }
+    const shape = toPublicAchievement({
+      ...internal, publishedRouteGeoJson: outAndBack,
+    }).routeShape!
+    expect(shape.endsCoincide).toBe(true)
+    expect(shape.finish).toBeNull()
+  })
+
+  // There is no parameter through which a track could arrive, so drawing one
+  // would require changing the type. This asserts that stays true.
+  it('has no way to receive a recorded track', () => {
+    const keys = Object.keys({
+      ...internal, publishedRouteGeoJson: publishedRoute,
+    })
+    expect(keys.filter((k) => /track|activity|recorded/i.test(k)))
+      .toEqual(['trackPoints'])
+    // …and trackPoints is never projected.
+    expect(JSON.stringify(withRoute)).not.toMatch(/trackPoints/)
+  })
+
+  it('still exposes only the permitted keys with a route attached', () => {
+    expect(Object.keys(withRoute).sort()).toEqual([...PUBLIC_ACHIEVEMENT_KEYS].sort())
+  })
+})
+
+describe('the route shape box', () => {
+  const line = (aspectDrivingLat: number) => ({
+    type: 'LineString',
+    coordinates: [
+      [-113.0, 37.2],
+      [-113.0 + 0.004, 37.2 + aspectDrivingLat],
+    ],
+  })
+
+  it('grows taller for a portrait route rather than squashing it', () => {
+    const tall = toPublicAchievement({
+      ...internal, publishedRouteGeoJson: line(0.02),
+    }).routeShape!
+    expect(tall.height).toBeGreaterThan(tall.width * 1.2)
+  })
+
+  it('stays landscape for a wide route', () => {
+    const wide = toPublicAchievement({
+      ...internal, publishedRouteGeoJson: line(0.0005),
+    }).routeShape!
+    expect(wide.height).toBeLessThan(wide.width)
+  })
+
+  // Clamped at both ends, so no route produces a tower or a letterbox.
+  it('never exceeds the clamp in either direction', () => {
+    for (const lat of [0.00001, 0.0005, 0.004, 0.05, 0.5]) {
+      const shape = toPublicAchievement({
+        ...internal, publishedRouteGeoJson: line(lat),
+      }).routeShape!
+      const aspect = shape.height / shape.width
+      expect(aspect).toBeGreaterThanOrEqual(0.55)
+      expect(aspect).toBeLessThanOrEqual(1.35)
+    }
+  })
+})

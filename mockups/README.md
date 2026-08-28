@@ -12,6 +12,7 @@ Six phone screens covering the core loop, plus the share card.
 | `5-unlock.png` | The payoff |
 | `6-profile.png` | Stats and collections |
 | `7-share-card.png` | Rendered by the real code, not drawn |
+| `7b-share-card-story.png` | The 9:16 Stories format, also real |
 
 ## What is real, and what is not
 
@@ -36,16 +37,29 @@ trail-scale drawing the route shape, the start and finish, and the elevation
 profile are what a runner actually reads. A basemap is a later decision, not a
 missing feature.
 
-## An open decision: should the share card carry the route?
+## Decided: the share card carries the route
 
-The public achievement page and share card currently show **no route trace** —
-that is the privacy contract (Round 1, Amendment 8), and an automated audit
-enforces it.
+The card and the public page draw the **published route**, never the
+participant's recorded track. Founder delegated the call; this is the reasoning.
 
-There is a defensible middle worth considering: draw the **published route**
-shape rather than the participant's recorded track. Visually near-identical,
-and it reveals nothing personal, because the route is public information we
-published ourselves. Needs a founder decision before it ships.
+It is safe for two reasons, and the second is the one that matters:
+
+1. The route is public information we published ourselves, and the card already
+   names the park and the date. The shape adds nothing a viewer did not have.
+2. What reaches the card is a **pre-projected SVG path in abstract drawing
+   space** — origin at the route's own first point, arbitrary scale. No latitude
+   or longitude survives the projection, so there is no georeference to recover
+   even in principle.
+
+The projection function takes the published route and has no parameter through
+which a track could arrive, so drawing one is not a mistake that can be made —
+it would require changing the type. Tests assert that no emitted number is
+within 1e-4 of any input coordinate, and that every emitted value is
+non-negative, so no longitude can survive.
+
+The privacy audit now runs with **real coordinates flowing into the pipeline**,
+which makes it a meaningful test rather than a check on data that never had
+anything to leak.
 
 ## Regenerating
 
