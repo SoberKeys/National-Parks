@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { SavePark } from '@/components/SavePark'
 import { SiteFooter } from '@/components/SiteFooter'
 import { draftsForPark } from '@/content/challenges'
 import { enrollmentOpen } from '@/lib/flags'
@@ -31,9 +32,12 @@ export default async function ParkPage({
           ← All parks
         </Link>
         <h1 className="mt-4 font-display text-4xl">{park.name}</h1>
-        <p className="mt-1 font-mono text-xs tracking-widest text-ink-muted uppercase">
-          {park.state}
-        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-4">
+          <p className="font-mono text-xs tracking-widest text-ink-muted uppercase">
+            {park.state}
+          </p>
+          <SavePark parkSlug={slug} parkName={park.name} />
+        </div>
 
         <h2 className="mt-12 font-display text-2xl">Challenges</h2>
 

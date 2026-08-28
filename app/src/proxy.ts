@@ -6,6 +6,12 @@ import {
   isPriceCohort,
 } from '@/lib/pricing'
 
+/** Referral token from a shared achievement page, e.g. /?ref=ab12cd34. */
+const REFERRAL_COOKIE = 'ref'
+const REFERRAL_MAX_AGE = 60 * 60 * 24 * 90
+/** Matches the token alphabet. Anything else is discarded, not stored. */
+const REFERRAL_PATTERN = /^[abcdefghjkmnpqrstuvwxyz23456789]{8}$/
+
 /**
  * Assigns the sticky price cohort on first visit. Doing it here means
  * every entry point gets one — the landing page, a shared achievement page, a
@@ -25,6 +31,21 @@ export default function proxy(request: NextRequest) {
       secure: process.env.NODE_ENV === 'production',
     })
   }
+
+  // First referrer wins. Overwriting would credit whoever the visitor happened
+  // to click last, which is not who actually brought them.
+  const incoming = request.nextUrl.searchParams.get('ref')
+  const held = request.cookies.get(REFERRAL_COOKIE)?.value
+  if (incoming && !held && REFERRAL_PATTERN.test(incoming)) {
+    response.cookies.set(REFERRAL_COOKIE, incoming, {
+      maxAge: REFERRAL_MAX_AGE,
+      httpOnly: true,
+      sameSite: 'lax',
+      path: '/',
+      secure: process.env.NODE_ENV === 'production',
+    })
+  }
+
   return response
 }
 

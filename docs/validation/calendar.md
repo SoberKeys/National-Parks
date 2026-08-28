@@ -21,29 +21,30 @@ Build order is dependency-driven. Tick as completed.
 - [x] PostHog + Sentry
 - [x] Database schema + migrations
 - [x] Park dataset pipeline (63 parks, sourced from the NPS Data API — never hand-typed)
-- [ ] Seed data for the three validation parks
+- [ ] Seed data for the three validation parks *(blocked: needs the NPS fetch run
+      somewhere with network access — developer.nps.gov is blocked here)*
 
 ### B2 · Phase 1 surfaces (launchable without counsel)
 - [x] Landing page (structure + copy per `PLAN.md` §5)
 - [x] Interactive concept map — 63 parks, 3 first
 - [x] Waitlist funnel with **three-way cohort assignment**
 - [x] Sticky price-cohort assignment ($29 / $39 / $49)
-- [ ] Save-a-park control (feeds Second-Park Action Rate)
-- [ ] Referral links (per-participant, feeds Stage 7 and hard actions)
+- [x] Save-a-park control (feeds Second-Park Action Rate)
+- [x] Referral links (per-participant, feeds Stage 7 and hard actions)
 - [x] Park + challenge pages in **informational mode**
 - [x] Founding Collector checkout (Stripe, $99 one-time, cap 250)
-- [ ] Transactional email
+- [x] Transactional email
 
 ### B3 · Phase 2 surfaces (built now, gated closed until counsel approves)
-- [ ] Participant agreement acceptance + versioning
+- [x] Participant agreement acceptance + versioning
 - [x] Challenge enrollment
 - [x] GPX / TCX upload *(FIT deferred — every major device exports GPX; FIT uploaders get exact instructions plus an offer to convert by hand)*
 - [x] Verification console — decision support, human decides
-- [ ] Unlock experience
+- [x] Unlock experience
 - [x] Share-card generation (A/B: counter vs no counter)
 - [x] Public achievement pages (A/B/C variants, **zero coordinates**)
-- [ ] Completion Kit checkout at the participant's assigned price
-- [ ] 48-hour and 21-day surveys
+- [x] Completion Kit checkout at the participant's assigned price
+- [x] 48-hour and 21-day surveys
 
 ### B4 · Instrumentation & admin
 - [x] Metrics dashboard — the 7-stage funnel, cohorts separated
@@ -53,7 +54,8 @@ Build order is dependency-driven. Tick as completed.
 
 ### B5 · Verification & quality
 - [x] GPX parser test suite *(export SHAPES covered; genuine files from three physical devices still outstanding)*
-- [ ] Money audit in Stripe test mode — all three prices, sticky assignment, refunds, the 250 cap
+- [ ] Money audit in Stripe test mode — all three prices, sticky assignment,
+      refunds, the 250 cap *(blocked: needs Stripe test keys)*
 - [x] 🔒 **Privacy audit** — `npm run audit:privacy`. Runs against live rendered output across three
       page variants and three card formats. Passing.
 - [x] Phase-gate audit — `npm run audit:gate`. A direct POST is rejected 403 with all three gate
@@ -63,7 +65,10 @@ Build order is dependency-driven. Tick as completed.
 - [ ] Field-verify every route in all three parks (T1 or T3 — see `park-research/README.md`)
 - [ ] Resolve the Shenandoah Explorer difficulty concern
 - [ ] Resolve Zion flash-flood and heat guidance at T1
-- [ ] Founder decision: route-named challenges vs 5K/10K labels
+- [x] Founder decision: **5K/10K labels adopted.** A route earns a label only if
+      its real distance is within ±15%; we never move a turnaround to manufacture
+      one. Four of five routes fit; Acadia's Ocean Path (7.08 km) needs a
+      replacement Explorer route
 
 ---
 

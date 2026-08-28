@@ -73,7 +73,7 @@ export default async function ChallengePage({
         {gate.open ? (
           <div className="mt-10">
             <Link
-              href={`/submit?challenge=${slug}:${key}`}
+              href={`/park/${slug}/${key}/enroll`}
               className="inline-block rounded-sm bg-ink px-6 py-3 text-base text-paper"
             >
               Enroll in this challenge

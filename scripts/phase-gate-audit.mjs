@@ -21,7 +21,21 @@ for (const [slug, key] of [['zion', 'parus'], ['acad', 'eagle-lake'], ['shen', '
   else pass(`${slug}/${key} shows the closed state and no enroll action`)
 }
 
-// 2. A direct POST must be rejected server-side, not merely hidden in the UI.
+// 2. The enrollment page itself must be shut, not merely unlinked.
+for (const [slug, key] of [['zion', 'parus'], ['acad', 'eagle-lake'], ['shen', 'milam-gap-lewis-falls']]) {
+  const res = await fetch(`${BASE}/park/${slug}/${key}/enroll`)
+  if (!res.ok) { fail(`${slug}/${key}/enroll returned HTTP ${res.status}`); continue }
+  const html = await res.text()
+  if (/Enroll in this challenge<\/button>|name="accept"/.test(html)) {
+    fail(`${slug}/${key}/enroll renders an acceptance form`)
+  } else if (!/Not open yet/.test(html)) {
+    fail(`${slug}/${key}/enroll shows no closed state`)
+  } else {
+    pass(`${slug}/${key}/enroll shows the closed state and no acceptance form`)
+  }
+}
+
+// 3. A direct POST must be rejected server-side, not merely hidden in the UI.
 const body = new FormData()
 body.set('challenge', 'zion:parus')
 body.set('track', new File(
@@ -40,7 +54,7 @@ if (post.status !== 403) {
   }
 }
 
-// 3. The landing page must not advertise open enrollment.
+// 4. The landing page must not advertise open enrollment.
 const home = await fetch(`${BASE}/`)
 const homeHtml = await home.text()
 if (/Choose a date and enroll/.test(homeHtml)) fail('landing page advertises enrollment')
