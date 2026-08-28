@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens mirror src/config/brand.ts. Neutral and restrained on purpose:
+ * premium, outdoors, collectible — not a brand palette. The founder-approved
+ * palette replaces these values, and only these values, at the branding phase.
+ */
+:root {
+  --ink: #16181a;
+  --ink-muted: #5a6169;
+  --paper: #faf8f5;
+  --paper-raised: #ffffff;
+  --line: #e2ddd5;
+  --accent: #b4603a;
+  --locked: #b9b2a7;
+  --warning: #8a5a12;
+  --danger: #8c2f24;
+
+  --font-display: ui-serif, Georgia, "Times New Roman", serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-paper: var(--paper);
+  --color-paper-raised: var(--paper-raised);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-locked: var(--locked);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
