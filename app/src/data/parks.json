@@ -1,0 +1,8 @@
+{
+  "source": "NPS Data API — https://www.nps.gov/subjects/digital/nps-data-api.htm",
+  "fetchedAt": null,
+  "unseeded": true,
+  "note": "Not yet seeded. Run `NPS_API_KEY=... node scripts/fetch-parks.mjs` to populate this file from the authoritative source. Park coordinates are safety-relevant and are never hand-typed.",
+  "count": 0,
+  "parks": []
+}

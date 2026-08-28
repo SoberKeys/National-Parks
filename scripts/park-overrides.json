@@ -1,0 +1,33 @@
+{
+  "_comment": [
+    "Human-authored reconciliation between NPS API unit records and the 63",
+    "designated National Parks. Every entry records WHY, because a silent",
+    "adjustment here is indistinguishable from a mistake.",
+    "",
+    "include: units that are one of the 63 but whose designation does not match",
+    "split:   one NPS unit that represents more than one official park",
+    "exclude: units matching the designation filter that are not one of the 63",
+    "",
+    "STATUS: unverified starting point. Run fetch-parks.mjs, read what it",
+    "reports, and confirm each entry against nps.gov before relying on it."
+  ],
+  "include": [
+    {
+      "parkCode": "redw",
+      "reason": "Redwood National and State Parks is one of the 63. Its NPS designation does not contain the words 'National Park', so the designation filter misses it.",
+      "verified": false
+    }
+  ],
+  "split": [
+    {
+      "parkCode": "seki",
+      "reason": "Sequoia and Kings Canyon are two separately designated National Parks administered as a single NPS unit. The API returns one record; the collection counts two.",
+      "verified": false,
+      "into": [
+        { "slug": "sequoia", "name": "Sequoia National Park", "lat": null, "lon": null },
+        { "slug": "kings-canyon", "name": "Kings Canyon National Park", "lat": null, "lon": null }
+      ]
+    }
+  ],
+  "exclude": []
+}
