@@ -168,7 +168,14 @@ export async function hasApprovedAgreement(): Promise<boolean> {
   return Boolean(data && data.length > 0)
 }
 
-export type QueueItem = { id: string; challengeName: string; createdAt: string }
+export type QueueItem = {
+  id: string
+  challengeName: string
+  createdAt: string
+  /** Headline decision-support numbers. Never a verdict. */
+  computed: Record<string, string | number | null> | null
+  flags: string[]
+}
 
 /** Submissions awaiting a human decision. */
 export async function pendingSubmissions(): Promise<QueueItem[]> {
@@ -176,7 +183,7 @@ export async function pendingSubmissions(): Promise<QueueItem[]> {
   try {
     const { data } = await db()
       .from('submissions')
-      .select('id, created_at, challenges ( name )')
+      .select('id, created_at, computed, challenges ( name )')
       .neq('status', 'decided')
       .order('created_at', { ascending: true })
       .limit(50)
@@ -185,12 +192,23 @@ export async function pendingSubmissions(): Promise<QueueItem[]> {
       const row = r as unknown as {
         id: string
         created_at: string
+        computed: Record<string, unknown> | null
         challenges: { name: string } | null
       }
+      const m = row.computed ?? {}
       return {
         id: row.id,
         challengeName: row.challenges?.name ?? 'Unknown challenge',
         createdAt: row.created_at,
+        // A deliberately short list. A reviewer reading twenty numbers reads
+        // none of them; the analyser is there for the full picture.
+        computed: {
+          distance: typeof m.distanceM === 'number' ? `${(m.distanceM / 1609.344).toFixed(2)} mi` : null,
+          moving: typeof m.movingS === 'number' ? `${Math.round(m.movingS / 60)} min` : null,
+          'start off': typeof m.startOffsetM === 'number' ? `${m.startOffsetM} m` : null,
+          'in corridor': typeof m.corridorShare === 'number' ? `${(m.corridorShare * 100).toFixed(0)}%` : null,
+        },
+        flags: Array.isArray(m.flags) ? (m.flags as string[]) : [],
       }
     })
   } catch {

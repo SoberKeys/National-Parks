@@ -1,3 +1,4 @@
+import { DecideForm } from '@/components/DecideForm'
 import { TrackAnalyser } from '@/components/TrackAnalyser'
 import { pendingSubmissions } from '@/lib/db'
 
@@ -31,9 +32,34 @@ export default async function QueuePage() {
           <ul className="space-y-3">
             {queue.map((s) => (
               <li key={s.id} className="rounded-sm border border-line bg-paper-raised p-5">
-                <p className="font-mono text-xs text-ink-muted">{s.id}</p>
-                <p className="mt-1">{s.challengeName}</p>
-                <p className="text-sm text-ink-muted">{s.createdAt}</p>
+                <div className="flex flex-wrap items-baseline justify-between gap-3">
+                  <p className="font-display text-lg">{s.challengeName}</p>
+                  <p className="font-mono text-xs text-ink-muted">{s.createdAt}</p>
+                </div>
+                <p className="mt-0.5 font-mono text-[11px] text-ink-muted">{s.id}</p>
+
+                {s.computed && (
+                  <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1 font-mono text-sm sm:grid-cols-4">
+                    {Object.entries(s.computed).map(([k, v]) => (
+                      <div key={k}>
+                        <dt className="text-[10px] tracking-wide text-ink-muted uppercase">{k}</dt>
+                        <dd>{v ?? '—'}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+
+                {s.flags.length > 0 && (
+                  <ul className="mt-3 list-disc space-y-1 pl-5 text-sm text-ink-muted">
+                    {s.flags.map((f) => <li key={f}>{f}</li>)}
+                  </ul>
+                )}
+                <p className="mt-3 text-xs text-ink-muted">
+                  These are observations, not a verdict. If a person plausibly did
+                  this, verify it.
+                </p>
+
+                <DecideForm submissionId={s.id} />
               </li>
             ))}
           </ul>
