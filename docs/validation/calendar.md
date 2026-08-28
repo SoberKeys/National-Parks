@@ -14,8 +14,8 @@ Full rationale in [`PLAN.md`](PLAN.md). Tick items as they complete; do not dele
 - [ ] **F** Counsel shortlist begun (3 candidates)
 - [ ] **F** Warm-network outreach starts — highest-conversion channel, start today
 - [x] **B** Repo init; blueprint, plan, amendments and ADRs committed
-- [ ] **B** Next.js + Vercel + Supabase skeleton
-- [ ] **B** PostHog + Sentry wired
+- [x] **B** Next.js + Supabase client skeleton *(code done; hosted Vercel + Supabase projects need founder accounts)*
+- [x] **B** PostHog + Sentry wired *(code done; DSN and project key need founder accounts)*
 
 **Day 2 · Wed Sep 2**
 - [ ] **F** Business bank application
