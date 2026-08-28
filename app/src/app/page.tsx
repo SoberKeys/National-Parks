@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { brand, COLLECTION_SIZE } from '@/config/brand'
 import { ConceptMap } from '@/components/ConceptMap'
@@ -166,12 +167,12 @@ export default async function Home() {
             Refundable in full, on request, for 90 days. We will tell you the
             date each item ships before you pay.
           </p>
-          <a
+          <Link
             href="/founding"
             className="mt-6 inline-block rounded-sm border border-ink px-5 py-3 text-base"
           >
             Reserve a founding number
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -210,8 +211,8 @@ export default async function Home() {
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-3xl flex-wrap gap-x-6 gap-y-2 px-6 py-8 text-xs text-ink-muted">
           <span>{brand.name}</span>
-          <a href="/privacy" className="underline">Privacy</a>
-          <a href="/terms" className="underline">Participant terms</a>
+          <Link href="/privacy" className="underline">Privacy</Link>
+          <Link href="/terms" className="underline">Participant terms</Link>
         </div>
       </footer>
     </main>

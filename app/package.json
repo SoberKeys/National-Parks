@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run lint && npm run test",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "audit:privacy": "node ../scripts/privacy-audit.mjs"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.71.0",

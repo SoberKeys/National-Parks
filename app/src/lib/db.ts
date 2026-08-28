@@ -1,4 +1,10 @@
 import 'server-only'
+import { COLLECTION_SIZE } from '@/config/brand'
+import {
+  toPublicAchievement,
+  type PublicAchievement,
+} from '@/lib/achievement'
+import { publicEnv } from '@/lib/env'
 import { createServiceClient } from '@/lib/supabase/server'
 import type { PriceCohort } from '@/lib/pricing'
 
@@ -85,4 +91,64 @@ export async function recordAudit(
   meta: Record<string, unknown> = {},
 ) {
   await db().from('audit_log').insert({ actor, action, meta })
+}
+
+/**
+ * Load a completion for a public surface.
+ *
+ * Selects an explicit column list rather than `*`, so a column added later
+ * cannot ride along into the projection, and hands the result straight to
+ * `toPublicAchievement` — the only path by which anything reaches a public
+ * page.
+ */
+export async function publicAchievementByToken(
+  token: string,
+): Promise<PublicAchievement | null> {
+  if (!publicEnv.supabaseUrl) return null
+
+  const { data, error } = await db()
+    .from('completions')
+    .select(
+      `public_token, ordinal_for_participant, completed_on, duration_s,
+       distance_m, elevation_gain_m, page_variant,
+       verifications ( decided_at ),
+       participants ( display_name ),
+       challenges ( name, parks ( name, states ) )`,
+    )
+    .eq('public_token', token)
+    .maybeSingle()
+
+  if (error || !data) return null
+
+  const row = data as unknown as {
+    public_token: string
+    ordinal_for_participant: number
+    completed_on: string
+    duration_s: number | null
+    distance_m: number | null
+    elevation_gain_m: number | null
+    page_variant: 'A' | 'B' | 'C'
+    verifications: { decided_at: string } | null
+    participants: { display_name: string | null } | null
+    challenges: {
+      name: string
+      parks: { name: string; states: string[] } | null
+    } | null
+  }
+
+  return toPublicAchievement({
+    publicToken: row.public_token,
+    parkName: row.challenges?.parks?.name ?? 'National Park',
+    parkStates: row.challenges?.parks?.states ?? [],
+    challengeName: row.challenges?.name ?? 'Challenge',
+    completedOn: row.completed_on,
+    durationS: row.duration_s,
+    distanceM: row.distance_m,
+    elevationGainM: row.elevation_gain_m,
+    ordinal: row.ordinal_for_participant,
+    collectionSize: COLLECTION_SIZE,
+    displayName: row.participants?.display_name ?? null,
+    verifiedAt: row.verifications?.decided_at ?? row.completed_on,
+    variant: row.page_variant,
+  })
 }
