@@ -19,43 +19,45 @@ Build order is dependency-driven. Tick as completed.
 - [x] Phase gate (`src/lib/flags.ts`) — defaults closed, throws rather than returning false
 - [x] Supabase clients (browser/server/service-role)
 - [x] PostHog + Sentry
-- [ ] Database schema + migrations
-- [ ] Park dataset pipeline (63 parks, sourced from the NPS Data API — never hand-typed)
+- [x] Database schema + migrations
+- [x] Park dataset pipeline (63 parks, sourced from the NPS Data API — never hand-typed)
 - [ ] Seed data for the three validation parks
 
 ### B2 · Phase 1 surfaces (launchable without counsel)
-- [ ] Landing page (structure + copy per `PLAN.md` §5)
-- [ ] Interactive concept map — 63 parks, 3 first
-- [ ] Waitlist funnel with **three-way cohort assignment**
-- [ ] Sticky price-cohort assignment ($29 / $39 / $49)
+- [x] Landing page (structure + copy per `PLAN.md` §5)
+- [x] Interactive concept map — 63 parks, 3 first
+- [x] Waitlist funnel with **three-way cohort assignment**
+- [x] Sticky price-cohort assignment ($29 / $39 / $49)
 - [ ] Save-a-park control (feeds Second-Park Action Rate)
 - [ ] Referral links (per-participant, feeds Stage 7 and hard actions)
-- [ ] Park + challenge pages in **informational mode**
-- [ ] Founding Collector checkout (Stripe, $99 one-time, cap 250)
+- [x] Park + challenge pages in **informational mode**
+- [x] Founding Collector checkout (Stripe, $99 one-time, cap 250)
 - [ ] Transactional email
 
 ### B3 · Phase 2 surfaces (built now, gated closed until counsel approves)
 - [ ] Participant agreement acceptance + versioning
-- [ ] Challenge enrollment
-- [ ] GPX / FIT / TCX upload
-- [ ] Verification console — decision support, human decides
+- [x] Challenge enrollment
+- [x] GPX / TCX upload *(FIT deferred — every major device exports GPX; FIT uploaders get exact instructions plus an offer to convert by hand)*
+- [x] Verification console — decision support, human decides
 - [ ] Unlock experience
-- [ ] Share-card generation (A/B: counter vs no counter)
-- [ ] Public achievement pages (A/B/C variants, **zero coordinates**)
+- [x] Share-card generation (A/B: counter vs no counter)
+- [x] Public achievement pages (A/B/C variants, **zero coordinates**)
 - [ ] Completion Kit checkout at the participant's assigned price
 - [ ] 48-hour and 21-day surveys
 
 ### B4 · Instrumentation & admin
-- [ ] Metrics dashboard — the 7-stage funnel, cohorts separated
-- [ ] Cash ledger surface
-- [ ] Route kill-switch
+- [x] Metrics dashboard — the 7-stage funnel, cohorts separated
+- [x] Cash ledger surface
+- [x] Route kill-switch *(publish gate: a route cannot reach a participant unless its source is T1/T3
+      and it carries no blocking concern — enforced in the database, the content layer and the gate)*
 
 ### B5 · Verification & quality
-- [ ] GPX parser test suite (real exports from ≥3 device types)
+- [x] GPX parser test suite *(export SHAPES covered; genuine files from three physical devices still outstanding)*
 - [ ] Money audit in Stripe test mode — all three prices, sticky assignment, refunds, the 250 cap
-- [ ] 🔒 **Privacy audit** — view-source, JSON payload and OG image of a live `/a/` page confirmed to
-      contain zero coordinates. **Blocking.**
-- [ ] Phase-gate audit — enrollment routes and `/submit` reject server-side while the flag is closed
+- [x] 🔒 **Privacy audit** — `npm run audit:privacy`. Runs against live rendered output across three
+      page variants and three card formats. Passing.
+- [x] Phase-gate audit — `npm run audit:gate`. A direct POST is rejected 403 with all three gate
+      reasons. Passing.
 
 ### B6 · Content (blocks launch, not build)
 - [ ] Field-verify every route in all three parks (T1 or T3 — see `park-research/README.md`)

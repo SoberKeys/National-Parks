@@ -27,24 +27,36 @@ if [ -z "${PGURL:-}" ]; then
     started_here=1
     for _ in $(seq 1 20); do pg_isready -q && break; sleep 0.5; done
   fi
-  dropdb --if-exists val_test >/dev/null 2>&1 || true
-  createdb val_test
-  TARGET=(-d val_test)
+  LOCAL=1
 else
-  TARGET=("$PGURL")
+  LOCAL=0
 fi
 
-echo "--- applying migrations ---"
-for f in "$ROOT"/supabase/migrations/*.sql; do
-  echo "  $(basename "$f")"
-  psql "${TARGET[@]}" -q -v ON_ERROR_STOP=1 -f "$f" >/dev/null
-done
+apply_migrations() {
+  # `local` matters: without it this loop clobbers the caller's loop variable.
+  local migration
+  for migration in "$ROOT"/supabase/migrations/*.sql; do
+    psql "$@" -q -v ON_ERROR_STOP=1 -f "$migration" >/dev/null
+  done
+}
 
-echo "--- running guards ---"
+# Each guard file gets a FRESH database. Guards insert fixture rows, and a
+# shared database makes them order-dependent — which is exactly the kind of
+# false failure that erodes trust in a test suite.
+echo "--- running guards, one fresh database per file ---"
 fail=0
 for f in "$ROOT"/supabase/tests/*.sql; do
+  echo "  $(basename "$f")"
+  if [ "$LOCAL" = "1" ]; then
+    dropdb --if-exists val_test >/dev/null 2>&1 || true
+    createdb val_test
+    TARGET=(-d val_test)
+  else
+    TARGET=("$PGURL")
+  fi
+  apply_migrations "${TARGET[@]}"
   out="$(psql "${TARGET[@]}" -v ON_ERROR_STOP=1 -f "$f" 2>&1)" || fail=1
-  echo "$out" | grep -E "NOTICE:|ERROR:" | sed 's/^psql:[^ ]* //'
+  echo "$out" | grep -E "NOTICE:|ERROR:" | sed 's/^psql:[^ ]* /    /'
   echo "$out" | grep -q "ERROR:" && fail=1
 done
 

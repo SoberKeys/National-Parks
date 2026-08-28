@@ -152,3 +152,44 @@ export async function publicAchievementByToken(
     variant: row.page_variant,
   })
 }
+
+/** True once counsel has approved a participant agreement version. */
+export async function hasApprovedAgreement(): Promise<boolean> {
+  if (!publicEnv.supabaseUrl) return false
+  const { data } = await db()
+    .from('agreement_versions')
+    .select('id')
+    .not('approved_by_counsel_at', 'is', null)
+    .limit(1)
+  return Boolean(data && data.length > 0)
+}
+
+export type QueueItem = { id: string; challengeName: string; createdAt: string }
+
+/** Submissions awaiting a human decision. */
+export async function pendingSubmissions(): Promise<QueueItem[]> {
+  if (!publicEnv.supabaseUrl) return []
+  try {
+    const { data } = await db()
+      .from('submissions')
+      .select('id, created_at, challenges ( name )')
+      .neq('status', 'decided')
+      .order('created_at', { ascending: true })
+      .limit(50)
+
+    return (data ?? []).map((r) => {
+      const row = r as unknown as {
+        id: string
+        created_at: string
+        challenges: { name: string } | null
+      }
+      return {
+        id: row.id,
+        challengeName: row.challenges?.name ?? 'Unknown challenge',
+        createdAt: row.created_at,
+      }
+    })
+  } catch {
+    return []
+  }
+}
