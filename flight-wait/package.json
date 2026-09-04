@@ -1,0 +1,12 @@
+{
+  "name": "leaveby",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Live flight status and security checkpoint waits, bridged into one leave-by time.",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs"
+  }
+}

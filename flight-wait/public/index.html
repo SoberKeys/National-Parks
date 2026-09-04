@@ -1,0 +1,1161 @@
+<title>Leaveby</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ground: #F2F4F7;
+    --surface: #FFFFFF;
+    --surface-2: #F7F8FB;
+    --ink: #101828;
+    --ink-2: #344054;
+    --muted: #5B6478;
+    --line: #E1E5EC;
+    --line-2: #CDD3DE;
+    --navy: #16223F;
+    --navy-2: #1F2E52;
+    --on-navy: #F4F6FB;
+    --on-navy-muted: #A9B4CF;
+    --yellow: #F5C518;
+    --yellow-ink: #3A2E00;
+    --good: #1E8E5A;
+    --good-bg: #E3F5EB;
+    --warn: #C96A00;
+    --warn-bg: #FCEFD9;
+    --bad: #D93A3A;
+    --bad-bg: #FBE4E4;
+    --neutral-bg: #EAEDF3;
+    --focus: #2F6BFF;
+    --shadow: 0 1px 2px rgba(16,24,40,.05), 0 8px 24px -12px rgba(16,24,40,.18);
+    --display: "Bricolage Grotesque", "Instrument Sans", system-ui, sans-serif;
+    --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --r-sm: 6px;
+    --r: 12px;
+    --r-lg: 18px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #0C1220;
+      --surface: #141C2E;
+      --surface-2: #1A2338;
+      --ink: #EEF2F8;
+      --ink-2: #C9D1E0;
+      --muted: #97A2B8;
+      --line: #27324A;
+      --line-2: #37445F;
+      --navy: #1A2540;
+      --navy-2: #223058;
+      --on-navy: #F4F6FB;
+      --on-navy-muted: #A9B4CF;
+      --good: #34C57A;
+      --good-bg: #123526;
+      --warn: #F5A623;
+      --warn-bg: #3A2A0C;
+      --bad: #F0564F;
+      --bad-bg: #3F1716;
+      --neutral-bg: #1F2A42;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #0C1220;
+    --surface: #141C2E;
+    --surface-2: #1A2338;
+    --ink: #EEF2F8;
+    --ink-2: #C9D1E0;
+    --muted: #97A2B8;
+    --line: #27324A;
+    --line-2: #37445F;
+    --navy: #1A2540;
+    --navy-2: #223058;
+    --on-navy: #F4F6FB;
+    --on-navy-muted: #A9B4CF;
+    --good: #34C57A;
+    --good-bg: #123526;
+    --warn: #F5A623;
+    --warn-bg: #3A2A0C;
+    --bad: #F0564F;
+    --bad-bg: #3F1716;
+    --neutral-bg: #1F2A42;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  svg { display: block; }
+
+  /* ---------- Top bar ---------- */
+  .top {
+    position: sticky; top: 0; z-index: 20;
+    background: var(--navy); color: var(--on-navy);
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .top-in {
+    max-width: 1080px; margin: 0 auto; padding: 10px 16px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .wordmark {
+    display: flex; align-items: center; gap: 9px;
+    background: none; border: 0; padding: 4px 2px; color: inherit;
+    font-family: var(--display); font-weight: 800; font-size: 19px; letter-spacing: -.01em;
+  }
+  .wordmark .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--yellow); box-shadow: 0 0 0 3px rgba(245,197,24,.22); }
+  .top form { flex: 1; display: flex; gap: 8px; max-width: 460px; margin-left: auto; }
+  .top input {
+    flex: 1; min-width: 0; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.08);
+    color: var(--on-navy); border-radius: var(--r-sm); padding: 8px 10px; font-family: var(--mono); font-size: 14px;
+    text-transform: uppercase;
+  }
+  .top input::placeholder { color: var(--on-navy-muted); text-transform: none; font-family: var(--body); }
+  .top .go { border: 0; background: var(--yellow); color: var(--yellow-ink); font-weight: 600; padding: 8px 14px; border-radius: var(--r-sm); }
+  .top .clock { font-family: var(--mono); font-size: 13px; color: var(--on-navy-muted); white-space: nowrap; }
+  @media (max-width: 640px) { .top .clock { display: none; } .top form { max-width: none; } }
+
+  /* ---------- Layout ---------- */
+  main { max-width: 1080px; margin: 0 auto; padding: 18px 16px 64px; }
+  .cols { display: grid; grid-template-columns: 1fr; gap: 18px; }
+  @media (min-width: 900px) {
+    .cols { grid-template-columns: minmax(0, 1fr) 420px; align-items: start; }
+    .cols > .right { position: sticky; top: 72px; }
+  }
+  @media (max-width: 899px) { .cols > .right { order: -1; } }
+  .stack { display: flex; flex-direction: column; gap: 18px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg);
+    padding: 18px;
+  }
+  .card-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  h1, h2, h3 { margin: 0; font-family: var(--display); text-wrap: balance; letter-spacing: -.015em; }
+  h2 { font-size: 20px; font-weight: 700; }
+  h3 { font-size: 16px; font-weight: 700; }
+  p { margin: 0; }
+  .muted { color: var(--muted); }
+  .small { font-size: 13px; }
+  .row { display: flex; align-items: center; gap: 10px; }
+  .between { justify-content: space-between; }
+  .wrap { flex-wrap: wrap; }
+
+  /* ---------- Pills & chips ---------- */
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px;
+    font-size: 12.5px; font-weight: 600; background: var(--neutral-bg); color: var(--ink-2); white-space: nowrap;
+  }
+  .pill.good { background: var(--good-bg); color: var(--good); }
+  .pill.warn { background: var(--warn-bg); color: var(--warn); }
+  .pill.bad { background: var(--bad-bg); color: var(--bad); }
+  .pill .d { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+  .pill.live .d { animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  @media (prefers-reduced-motion: reduce) { .pill.live .d { animation: none; } }
+
+  .chip {
+    border: 1px solid var(--line-2); background: var(--surface); color: var(--ink-2);
+    border-radius: 999px; padding: 6px 12px; font-size: 13.5px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .chip[aria-pressed="true"] { background: var(--navy); border-color: var(--navy); color: var(--on-navy); }
+  .chip .k { font-family: var(--mono); font-size: 12px; opacity: .8; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn {
+    border: 1px solid var(--line-2); background: var(--surface); border-radius: var(--r-sm);
+    padding: 7px 12px; font-weight: 600; font-size: 13.5px; color: var(--ink);
+  }
+  .btn.primary { background: var(--navy); border-color: var(--navy); color: var(--on-navy); }
+  .btn.quiet { border-color: transparent; background: transparent; color: var(--muted); }
+  .btn:hover { border-color: var(--muted); }
+  .btn.primary:hover { background: var(--navy-2); }
+  .link { background: none; border: 0; padding: 0; color: var(--ink-2); text-decoration: underline; text-underline-offset: 3px; font-weight: 500; }
+
+  /* ---------- Home ---------- */
+  .hero {
+    background: var(--navy); color: var(--on-navy); border-radius: var(--r-lg);
+    padding: 28px 22px 22px;
+    display: grid; gap: 16px;
+  }
+  .hero h1 { font-size: clamp(30px, 5vw, 44px); font-weight: 800; line-height: 1.02; max-width: 16ch; }
+  .hero p { color: var(--on-navy-muted); max-width: 52ch; }
+  .hero form { display: grid; grid-template-columns: 1fr auto; gap: 8px; max-width: 520px; }
+  .hero input {
+    border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.08); color: var(--on-navy);
+    border-radius: var(--r); padding: 12px 14px; font-family: var(--mono); font-size: 18px; text-transform: uppercase; min-width: 0;
+  }
+  .hero input::placeholder { color: var(--on-navy-muted); text-transform: none; font-family: var(--body); font-size: 16px; }
+  .hero .go { border: 0; background: var(--yellow); color: var(--yellow-ink); font-weight: 700; padding: 0 18px; border-radius: var(--r); font-size: 15px; }
+  .hero .chips .chip { background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.2); color: var(--on-navy); }
+  .hero .chips .chip[aria-pressed="true"] { background: var(--yellow); border-color: var(--yellow); color: var(--yellow-ink); }
+
+  .board { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+  .fl {
+    text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r);
+    padding: 12px 14px; display: grid; gap: 8px; color: inherit;
+  }
+  .fl:hover { border-color: var(--line-2); box-shadow: var(--shadow); }
+  .fl .ident { font-family: var(--mono); font-weight: 600; font-size: 15px; }
+  .fl .route { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+  .fl .when { font-family: var(--mono); font-size: 13px; }
+  .fl .l2 { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+
+  .apgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .ap {
+    text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: var(--r);
+    padding: 12px 14px; display: grid; gap: 4px; color: inherit;
+  }
+  .ap:hover { border-color: var(--line-2); box-shadow: var(--shadow); }
+  .ap .code { font-family: var(--mono); font-weight: 600; font-size: 17px; }
+  .ap .name { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ap .w { font-family: var(--display); font-weight: 700; font-size: 22px; line-height: 1; margin-top: 4px; }
+  .ap .w small { font-family: var(--body); font-weight: 500; font-size: 12px; color: var(--muted); margin-left: 4px; }
+
+  /* ---------- Flight header ---------- */
+  .fhead { display: grid; gap: 14px; }
+  .fhead .l1 { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .fhead .ident { font-family: var(--mono); font-weight: 600; font-size: 20px; }
+  .fhead .airline { color: var(--muted); }
+  .route-big { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; }
+  .route-big .code { font-family: var(--display); font-weight: 800; font-size: clamp(34px, 7vw, 48px); line-height: 1; letter-spacing: -.02em; }
+  .route-big .city { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .route-big .t { font-family: var(--mono); font-size: 15px; margin-top: 8px; display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .route-big .t s { color: var(--muted); text-decoration: line-through; }
+  .route-big .t .delta { color: var(--bad); font-weight: 600; font-size: 13px; }
+  .route-big .to { text-align: right; }
+  .route-big .plane { color: var(--muted); }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 10px; border-top: 1px solid var(--line); padding-top: 12px; }
+  .fact .k { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .fact .v { font-family: var(--mono); font-size: 16px; font-weight: 500; margin-top: 2px; }
+  .fact .v.changed { color: var(--warn); }
+
+  /* ---------- Verdict ---------- */
+  .verdict {
+    background: var(--navy); color: var(--on-navy); border-radius: var(--r-lg);
+    padding: 20px 20px 18px; display: grid; gap: 14px; position: relative; overflow: hidden;
+  }
+  .verdict::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: var(--vc, var(--good));
+  }
+  .verdict .eyebrow { color: var(--on-navy-muted); }
+  .verdict .big { font-family: var(--display); font-weight: 800; font-size: clamp(40px, 9vw, 58px); line-height: .98; letter-spacing: -.025em; }
+  .verdict .big .ampm { font-size: .42em; font-weight: 700; margin-left: 6px; letter-spacing: 0; }
+  .verdict .sub { color: var(--on-navy-muted); font-size: 14.5px; max-width: 46ch; }
+  .verdict .sub b { color: var(--on-navy); font-weight: 600; }
+  .verdict .state { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .verdict .pill { background: rgba(255,255,255,.1); color: var(--on-navy); }
+  .verdict .pill.good { color: #7EE2AE; }
+  .verdict .pill.warn { color: #FFC862; }
+  .verdict .pill.bad { color: #FF8B85; }
+  .verdict .in { font-family: var(--mono); font-size: 13px; color: var(--on-navy-muted); }
+
+  /* bridge bar */
+  .bridge { display: grid; gap: 6px; }
+  .bar { display: flex; height: 26px; border-radius: 6px; overflow: hidden; background: rgba(255,255,255,.06); position: relative; }
+  .seg { min-width: 3px; display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 11px; color: var(--on-navy); overflow: hidden; white-space: nowrap; border-right: 1px solid rgba(0,0,0,.25); }
+  .seg.travel { background: #3E5289; }
+  .seg.curb { background: #4A6199; }
+  .seg.bag { background: #55659B; }
+  .seg.wait { background: #7D6B2C; }
+  .seg.walk { background: #4A6199; }
+  .seg.buffer { background: rgba(255,255,255,.12); }
+  .seg.boarding { background: #2F7A57; }
+  .seg.close { background: #8A3E3E; }
+  .seg span { padding: 0 6px; }
+  .nowmark { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--yellow); box-shadow: 0 0 0 2px rgba(245,197,24,.25); }
+  .nowmark::after { content: "now"; position: absolute; top: -16px; left: -12px; font-family: var(--mono); font-size: 10px; color: var(--yellow); letter-spacing: .04em; }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--on-navy-muted); }
+  .legend i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+  /* steps */
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; }
+  .step { display: grid; grid-template-columns: 74px 18px 1fr; gap: 0 10px; align-items: start; position: relative; padding: 0 0 14px; }
+  .step:last-child { padding-bottom: 0; }
+  .step .t { font-family: var(--mono); font-size: 14px; font-weight: 500; padding-top: 1px; }
+  .step .t small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; }
+  .step .n { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line-2); background: var(--surface); position: relative; z-index: 1; margin-top: 2px; }
+  .step.now .n { background: var(--yellow); border-color: var(--yellow); box-shadow: 0 0 0 3px rgba(245,197,24,.25); }
+  .step.hard .n { background: var(--navy); border-color: var(--navy); }
+  .step.past .n { border-color: var(--line); background: var(--line); }
+  .step:not(:last-child)::after { content: ""; position: absolute; left: 92px; top: 20px; bottom: -2px; width: 2px; background: var(--line); }
+  .step .b { display: grid; gap: 2px; }
+  .step .title { font-weight: 600; }
+  .step .desc { font-size: 13px; color: var(--muted); }
+  .step .desc b { color: var(--ink-2); font-weight: 600; }
+  .step .desc .live { color: var(--good); font-weight: 600; }
+
+  /* controls */
+  .controls { display: grid; gap: 12px; }
+  .ctl { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .ctl .lab { display: grid; gap: 1px; }
+  .ctl .lab b { font-weight: 600; font-size: 14px; }
+  .ctl .lab span { font-size: 12.5px; color: var(--muted); }
+  .stepper { display: inline-flex; align-items: center; border: 1px solid var(--line-2); border-radius: var(--r-sm); overflow: hidden; }
+  .stepper button { width: 34px; height: 34px; border: 0; background: var(--surface-2); font-size: 18px; line-height: 1; }
+  .stepper button:hover { background: var(--neutral-bg); }
+  .stepper output { min-width: 68px; text-align: center; font-family: var(--mono); font-size: 14px; font-weight: 500; }
+  .switch { position: relative; width: 44px; height: 26px; border-radius: 999px; background: var(--line-2); border: 0; padding: 0; flex: none; transition: background .15s; }
+  .switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform .15s; box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+  .switch[aria-checked="true"] { background: var(--good); }
+  .switch[aria-checked="true"]::after { transform: translateX(18px); }
+  .seg-ctl { display: inline-flex; border: 1px solid var(--line-2); border-radius: var(--r-sm); overflow: hidden; }
+  .seg-ctl button { border: 0; background: var(--surface-2); padding: 7px 11px; font-size: 13px; font-weight: 600; color: var(--muted); }
+  .seg-ctl button + button { border-left: 1px solid var(--line-2); }
+  .seg-ctl button[aria-pressed="true"] { background: var(--navy); color: var(--on-navy); }
+
+  /* ---------- Security ---------- */
+  .cps { display: grid; gap: 8px; }
+  .cp {
+    display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: center;
+    border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; background: var(--surface);
+    text-align: left; color: inherit; position: relative;
+  }
+  .cp:hover { border-color: var(--line-2); }
+  .cp.rec { border-color: var(--yellow); background: linear-gradient(0deg, rgba(245,197,24,.07), rgba(245,197,24,.07)), var(--surface); }
+  .cp.rec::before { content: ""; position: absolute; left: -1px; top: 12px; bottom: 12px; width: 4px; border-radius: 0 3px 3px 0; background: var(--yellow); }
+  .cp.closed { opacity: .55; }
+  .cp .nm { font-weight: 600; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .cp .nm .tag { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--yellow-ink); background: var(--yellow); padding: 1px 6px; border-radius: 4px; }
+  .cp .meta { font-size: 12.5px; color: var(--muted); }
+  .cp .tot { text-align: right; font-family: var(--mono); }
+  .cp .tot b { font-family: var(--display); font-weight: 700; font-size: 24px; line-height: 1; letter-spacing: -.02em; }
+  .cp .tot small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .cp .tot .delta { color: var(--muted); font-size: 12px; }
+  .lanes { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .lane { display: grid; gap: 4px; }
+  .lane .lk { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); font-family: var(--mono); }
+  .lane .lk b { color: var(--ink); font-weight: 600; }
+  .lane .lk .tr { font-size: 11px; }
+  .lane .lk .tr.up { color: var(--bad); }
+  .lane .lk .tr.down { color: var(--good); }
+  .lane .track { height: 6px; border-radius: 3px; background: var(--neutral-bg); overflow: hidden; }
+  .lane .fill { height: 100%; border-radius: 3px; background: var(--ink-2); }
+  .lane.sel .fill { background: var(--yellow); }
+  .lane.sel .lk b { color: var(--ink); }
+  .lane.na .lk { opacity: .55; }
+  .srcline { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 12.5px; color: var(--muted); }
+  .src { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11.5px; padding: 2px 8px; border-radius: 4px; background: var(--neutral-bg); color: var(--ink-2); }
+  .src.live { background: var(--good-bg); color: var(--good); }
+  .src.demo { background: var(--warn-bg); color: var(--warn); }
+
+  /* alerts */
+  .alerts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .alert { display: grid; grid-template-columns: 58px 1fr; gap: 10px; align-items: baseline; font-size: 14px; padding: 8px 10px; border-radius: var(--r-sm); background: var(--surface-2); }
+  .alert .t { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .alert.warn { background: var(--warn-bg); }
+  .alert.bad { background: var(--bad-bg); }
+  .alert.good { background: var(--good-bg); }
+  .empty { color: var(--muted); font-size: 13.5px; padding: 6px 0; }
+
+  /* ---------- Airport view ---------- */
+  .aphead { display: grid; gap: 4px; }
+  .aphead h1 { font-size: clamp(26px, 5vw, 36px); font-weight: 800; }
+  .chart { width: 100%; height: auto; }
+  .chart text { font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+  .chart .grid { stroke: var(--line); }
+  .chart .curve { fill: none; stroke: var(--ink-2); stroke-width: 2; }
+  .chart .area { fill: var(--ink-2); opacity: .08; }
+  .chart .nowline { stroke: var(--yellow); stroke-width: 2; }
+  .chart .livept { fill: var(--yellow); stroke: var(--surface); stroke-width: 2; }
+  .chart .band { fill: var(--good); opacity: .12; }
+  .kv { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+  .kv .tile { background: var(--surface-2); border-radius: var(--r); padding: 12px 14px; }
+  .kv .tile .k { font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .kv .tile .v { font-family: var(--display); font-weight: 700; font-size: 24px; line-height: 1.1; margin-top: 4px; letter-spacing: -.02em; }
+  .kv .tile .v small { font-family: var(--body); font-weight: 500; font-size: 12.5px; color: var(--muted); }
+
+  .notice { border: 1px dashed var(--line-2); border-radius: var(--r); padding: 12px 14px; font-size: 13.5px; color: var(--muted); }
+  .notice b { color: var(--ink-2); }
+  .foot { margin-top: 28px; font-size: 12.5px; color: var(--muted); display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--navy); color: var(--on-navy); padding: 10px 14px; border-radius: 999px; font-size: 13.5px; box-shadow: var(--shadow); z-index: 30; }
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <button class="wordmark" data-nav="#/" aria-label="Leaveby home"><span class="dot"></span>Leaveby</button>
+    <span class="clock" id="clock"></span>
+    <form id="topsearch" role="search">
+      <label class="sr" for="q">Flight number</label>
+      <input id="q" name="q" placeholder="Flight number, e.g. UA 1523" autocomplete="off" spellcheck="false">
+      <button class="go" type="submit">Check</button>
+    </form>
+  </div>
+</header>
+<main id="view" aria-live="polite"></main>
+
+<script>
+(() => {
+'use strict';
+
+/* ============================================================
+   Airport reference data
+   Checkpoints, lanes, hours (local), and walk minutes from each
+   checkpoint to each concourse. Gates map to concourses by
+   letter prefix, or by numeric range where an airport uses
+   plain numbers (LAX, JFK T5/T8).
+   ============================================================ */
+const AIRPORTS = {
+  SFO: { name: "San Francisco International", city: "San Francisco", tz: "America/Los_Angeles", base: 18, profile: "hub",
+    checkpoints: [
+      { id: "sfo-b", name: "Terminal 1 · Checkpoint B", terminal: "1", lanes: ["std","pre","clear"], hours: [3.5, 24], f: 1.0, walk: { B: 4, C: 9, D: 14, A: 12, E: 18, F: 20, G: 22 } },
+      { id: "sfo-c", name: "Terminal 1 · Checkpoint C", terminal: "1", lanes: ["std","pre"], hours: [4, 22], f: .8, walk: { C: 4, B: 8, D: 10, A: 16, E: 16, F: 18, G: 24 } },
+      { id: "sfo-d", name: "Terminal 2 · Checkpoint D", terminal: "2", lanes: ["std","pre","clear"], hours: [4, 23], f: .9, walk: { D: 4, C: 10, E: 9, B: 14, F: 13, A: 22, G: 18 } },
+      { id: "sfo-e", name: "Terminal 3 · Checkpoint E", terminal: "3", lanes: ["std","pre"], hours: [4, 23], f: .85, walk: { E: 4, F: 7, D: 9, G: 14, C: 16, B: 20, A: 24 } },
+      { id: "sfo-f", name: "Terminal 3 · Checkpoint F", terminal: "3", lanes: ["std","pre","clear"], hours: [0, 24], f: 1.15, walk: { F: 4, E: 6, G: 11, D: 13, C: 18, B: 22, A: 26 } },
+      { id: "sfo-a", name: "International · Checkpoint A", terminal: "Intl", lanes: ["std","pre","clear"], hours: [4, 24], f: .95, walk: { A: 5, B: 9, G: 20, C: 16, D: 22 } },
+      { id: "sfo-g", name: "International · Checkpoint G", terminal: "Intl", lanes: ["std","pre","clear"], hours: [4, 24], f: 1.05, walk: { G: 5, F: 9, E: 12, A: 20, D: 18 } },
+    ] },
+  ORD: { name: "Chicago O'Hare International", city: "Chicago", tz: "America/Chicago", base: 22, profile: "hub",
+    checkpoints: [
+      { id: "ord-1-2", name: "Terminal 1 · Checkpoint 2", terminal: "1", lanes: ["std","pre","clear"], hours: [0, 24], f: 1.1, walk: { B: 4, C: 11, E: 12, F: 14, G: 18, H: 20, K: 22, L: 24 } },
+      { id: "ord-1-3", name: "Terminal 1 · Checkpoint 3", terminal: "1", lanes: ["std","pre"], hours: [4, 22], f: .9, walk: { B: 5, C: 10, E: 13, F: 15, G: 19, H: 21, K: 23, L: 25 } },
+      { id: "ord-2-4", name: "Terminal 2 · Checkpoint 4", terminal: "2", lanes: ["std","pre","clear"], hours: [3.5, 24], f: .85, walk: { E: 4, F: 5, B: 10, C: 15, G: 9, H: 12, K: 14, L: 16 } },
+      { id: "ord-3-7", name: "Terminal 3 · Checkpoint 7", terminal: "3", lanes: ["std","pre"], hours: [4, 23], f: .95, walk: { H: 5, K: 5, G: 8, L: 9, E: 12, F: 12, B: 20, C: 24 } },
+      { id: "ord-3-8", name: "Terminal 3 · Checkpoint 8", terminal: "3", lanes: ["std","pre","clear"], hours: [3.5, 24], f: 1.05, walk: { G: 6, H: 5, K: 6, L: 8, E: 14, F: 13, B: 22, C: 26 } },
+      { id: "ord-5", name: "Terminal 5 · Checkpoint", terminal: "5", lanes: ["std","pre","clear"], hours: [4, 24], f: .8, walk: { M: 5 } },
+    ] },
+  ATL: { name: "Hartsfield-Jackson Atlanta International", city: "Atlanta", tz: "America/New_York", base: 26, profile: "hub",
+    checkpoints: [
+      { id: "atl-main", name: "Domestic · Main Checkpoint", terminal: "Domestic", lanes: ["std","pre","clear"], hours: [0, 24], f: 1.2, walk: { T: 3, A: 7, B: 10, C: 13, D: 16, E: 19, F: 22 } },
+      { id: "atl-north", name: "Domestic · North Checkpoint", terminal: "Domestic", lanes: ["std","pre"], hours: [4, 22], f: .9, walk: { T: 4, A: 8, B: 11, C: 14, D: 17, E: 20, F: 23 } },
+      { id: "atl-south", name: "Domestic · South Checkpoint", terminal: "Domestic", lanes: ["std","pre","clear"], hours: [4, 23], f: .95, walk: { T: 4, A: 8, B: 11, C: 14, D: 17, E: 20, F: 23 } },
+      { id: "atl-intl", name: "International · Checkpoint F", terminal: "Intl", lanes: ["std","pre","clear"], hours: [4, 24], f: .75, walk: { F: 4, E: 7, D: 10, C: 13, B: 16, A: 19, T: 22 } },
+    ] },
+  DEN: { name: "Denver International", city: "Denver", tz: "America/Denver", base: 24, profile: "leisure",
+    checkpoints: [
+      { id: "den-south", name: "South Checkpoint · Level 5", terminal: "Jeppesen", lanes: ["std","pre","clear"], hours: [3.5, 24], f: 1.1, walk: { A: 10, B: 14, C: 18 } },
+      { id: "den-north", name: "North Checkpoint · Level 6", terminal: "Jeppesen", lanes: ["std","pre"], hours: [4, 22], f: .85, walk: { A: 11, B: 15, C: 19 } },
+      { id: "den-bridge", name: "West Bridge Checkpoint · A", terminal: "Jeppesen", lanes: ["std","pre","clear"], hours: [4, 21], f: .95, walk: { A: 5, B: 14, C: 18 } },
+    ] },
+  LAX: { name: "Los Angeles International", city: "Los Angeles", tz: "America/Los_Angeles", base: 22, profile: "intl",
+    numeric: [[1,19,"T1"],[20,29,"T2"],[30,39,"T3"],[40,49,"T4"],[50,59,"T5"],[60,69,"T6"],[70,79,"T7"],[80,89,"T8"],[100,225,"TB"]],
+    checkpoints: [
+      { id: "lax-1", name: "Terminal 1 · Checkpoint", terminal: "1", lanes: ["std","pre","clear"], hours: [3.5, 24], f: 1.0, walk: { T1: 5, T2: 22, T3: 24, TB: 26 } },
+      { id: "lax-23", name: "Terminal 2/3 · Checkpoint", terminal: "2/3", lanes: ["std","pre","clear"], hours: [4, 24], f: .9, walk: { T2: 5, T3: 6, TB: 12, T1: 20 } },
+      { id: "lax-4", name: "Terminal 4 · Checkpoint", terminal: "4", lanes: ["std","pre","clear"], hours: [4, 24], f: 1.05, walk: { T4: 5, T5: 9, TB: 12, T6: 14, T7: 18, T8: 20 } },
+      { id: "lax-5", name: "Terminal 5 · Checkpoint", terminal: "5", lanes: ["std","pre","clear"], hours: [4, 23], f: .9, walk: { T5: 5, T4: 9, T6: 8, T7: 13, T8: 15, TB: 18 } },
+      { id: "lax-6", name: "Terminal 6 · Checkpoint", terminal: "6", lanes: ["std","pre"], hours: [4, 23], f: .8, walk: { T6: 5, T5: 8, T7: 7, T8: 9, T4: 14, TB: 22 } },
+      { id: "lax-78", name: "Terminal 7/8 · Checkpoint", terminal: "7/8", lanes: ["std","pre","clear"], hours: [3.5, 24], f: 1.1, walk: { T7: 5, T8: 6, T6: 7, T5: 13, T4: 18, TB: 26 } },
+      { id: "lax-tb", name: "Tom Bradley · Checkpoint", terminal: "B", lanes: ["std","pre","clear"], hours: [0, 24], f: 1.15, walk: { TB: 6, T3: 12, T2: 14, T4: 12, T5: 18 } },
+    ] },
+  JFK: { name: "John F. Kennedy International", city: "New York", tz: "America/New_York", base: 20, profile: "intl",
+    numeric: [[1,30,"J5"],[31,47,"J8"]],
+    checkpoints: [
+      { id: "jfk-1", name: "Terminal 1 · Checkpoint", terminal: "1", lanes: ["std","pre","clear"], hours: [4, 24], f: .95, walk: { "1": 5 } },
+      { id: "jfk-4", name: "Terminal 4 · Checkpoint", terminal: "4", lanes: ["std","pre","clear"], hours: [0, 24], f: 1.15, walk: { A: 5, B: 9 } },
+      { id: "jfk-5", name: "Terminal 5 · Checkpoint", terminal: "5", lanes: ["std","pre","clear"], hours: [3.5, 24], f: 1.0, walk: { J5: 5 } },
+      { id: "jfk-7", name: "Terminal 7 · Checkpoint", terminal: "7", lanes: ["std","pre"], hours: [4, 23], f: .8, walk: { "7": 5 } },
+      { id: "jfk-8", name: "Terminal 8 · Checkpoint", terminal: "8", lanes: ["std","pre","clear"], hours: [3.5, 24], f: 1.05, walk: { J8: 5, C: 12 } },
+    ] },
+  SEA: { name: "Seattle–Tacoma International", city: "Seattle", tz: "America/Los_Angeles", base: 24, profile: "hub",
+    checkpoints: [
+      { id: "sea-1", name: "Checkpoint 1 · South", terminal: "Main", lanes: ["std","pre"], hours: [4, 22], f: .85, walk: { A: 5, B: 4, C: 8, D: 10, N: 14, S: 16 } },
+      { id: "sea-2", name: "Checkpoint 2", terminal: "Main", lanes: ["std","pre","clear"], hours: [3.5, 24], f: 1.05, walk: { B: 5, C: 6, D: 7, A: 8, N: 12, S: 14 } },
+      { id: "sea-3", name: "Checkpoint 3 · Central", terminal: "Main", lanes: ["std","pre","clear"], hours: [3.5, 24], f: 1.15, walk: { C: 5, D: 6, B: 7, A: 10, N: 11, S: 13 } },
+      { id: "sea-4", name: "Checkpoint 4", terminal: "Main", lanes: ["std","pre"], hours: [4, 23], f: .9, walk: { D: 4, C: 6, N: 10, S: 12, B: 9, A: 12 } },
+      { id: "sea-5", name: "Checkpoint 5 · North", terminal: "Main", lanes: ["std","pre","clear"], hours: [4, 22], f: .95, walk: { N: 8, D: 6, S: 12, C: 8, B: 11, A: 14 } },
+    ] },
+  DFW: { name: "Dallas Fort Worth International", city: "Dallas", tz: "America/Chicago", base: 18, profile: "hub",
+    checkpoints: [
+      { id: "dfw-a", name: "Terminal A · Checkpoint A21", terminal: "A", lanes: ["std","pre","clear"], hours: [4, 23], f: 1.0, walk: { A: 5, B: 9, C: 9, D: 12, E: 12 } },
+      { id: "dfw-b", name: "Terminal B · Checkpoint B30", terminal: "B", lanes: ["std","pre"], hours: [4, 22], f: .85, walk: { B: 5, A: 9, D: 9, C: 12, E: 14 } },
+      { id: "dfw-c", name: "Terminal C · Checkpoint C21", terminal: "C", lanes: ["std","pre","clear"], hours: [3.5, 24], f: 1.1, walk: { C: 5, A: 9, D: 9, E: 9, B: 12 } },
+      { id: "dfw-d", name: "Terminal D · Checkpoint D22", terminal: "D", lanes: ["std","pre","clear"], hours: [4, 24], f: 1.05, walk: { D: 5, B: 9, C: 9, E: 9, A: 12 } },
+      { id: "dfw-e", name: "Terminal E · Checkpoint E16", terminal: "E", lanes: ["std","pre"], hours: [4, 22], f: .9, walk: { E: 5, C: 9, D: 9, A: 12, B: 14 } },
+    ] },
+  BOS: { name: "Boston Logan International", city: "Boston", tz: "America/New_York", base: 16, profile: "hub",
+    checkpoints: [
+      { id: "bos-a", name: "Terminal A · Checkpoint", terminal: "A", lanes: ["std","pre","clear"], hours: [3.5, 23], f: 1.0, walk: { A: 5, E: 12, B: 16, C: 20 } },
+      { id: "bos-b1", name: "Terminal B · Checkpoint B1 (Airside)", terminal: "B", lanes: ["std","pre","clear"], hours: [4, 23], f: 1.05, walk: { B: 5, C: 12, A: 16 } },
+      { id: "bos-b2", name: "Terminal B · Checkpoint B2", terminal: "B", lanes: ["std","pre"], hours: [4, 22], f: .85, walk: { B: 6, C: 11, A: 17 } },
+      { id: "bos-c", name: "Terminal C · Checkpoint", terminal: "C", lanes: ["std","pre","clear"], hours: [0, 24], f: 1.1, walk: { C: 5, E: 8, B: 12 } },
+      { id: "bos-e", name: "Terminal E · Checkpoint", terminal: "E", lanes: ["std","pre","clear"], hours: [4, 24], f: .9, walk: { E: 5, C: 8, A: 12 } },
+    ] },
+  MIA: { name: "Miami International", city: "Miami", tz: "America/New_York", base: 24, profile: "intl",
+    checkpoints: [
+      { id: "mia-2", name: "Checkpoint 2 · Concourse D", terminal: "North", lanes: ["std","pre","clear"], hours: [0, 24], f: 1.15, walk: { D: 6, E: 12, F: 18 } },
+      { id: "mia-3", name: "Checkpoint 3 · Concourse E", terminal: "Central", lanes: ["std","pre"], hours: [4, 23], f: .9, walk: { E: 5, D: 10, F: 8, G: 12 } },
+      { id: "mia-4", name: "Checkpoint 4 · Concourse F", terminal: "Central", lanes: ["std","pre","clear"], hours: [4, 23], f: .95, walk: { F: 5, E: 8, G: 8, H: 12, D: 16 } },
+      { id: "mia-6", name: "Checkpoint 6 · Concourse H", terminal: "South", lanes: ["std","pre","clear"], hours: [4, 24], f: 1.0, walk: { H: 5, J: 8, G: 8, F: 12 } },
+    ] },
+  // Destinations without modeled checkpoints
+  LAS: { name: "Harry Reid International", city: "Las Vegas", tz: "America/Los_Angeles" },
+  MCO: { name: "Orlando International", city: "Orlando", tz: "America/New_York" },
+  EWR: { name: "Newark Liberty International", city: "Newark", tz: "America/New_York" },
+  PHX: { name: "Phoenix Sky Harbor International", city: "Phoenix", tz: "America/Phoenix" },
+  IAH: { name: "George Bush Intercontinental", city: "Houston", tz: "America/Chicago" },
+  MSP: { name: "Minneapolis–Saint Paul International", city: "Minneapolis", tz: "America/Chicago" },
+  DCA: { name: "Ronald Reagan Washington National", city: "Washington", tz: "America/New_York" },
+  AUS: { name: "Austin-Bergstrom International", city: "Austin", tz: "America/Chicago" },
+  SAN: { name: "San Diego International", city: "San Diego", tz: "America/Los_Angeles" },
+  LHR: { name: "London Heathrow", city: "London", tz: "Europe/London" },
+  CDG: { name: "Paris Charles de Gaulle", city: "Paris", tz: "Europe/Paris" },
+  NRT: { name: "Tokyo Narita", city: "Tokyo", tz: "Asia/Tokyo" },
+  HNL: { name: "Daniel K. Inouye International", city: "Honolulu", tz: "Pacific/Honolulu" },
+};
+const ORIGINS = Object.keys(AIRPORTS).filter(c => AIRPORTS[c].checkpoints);
+
+const AIRLINES = {
+  UA: { name: "United", hubs: ["SFO","ORD","DEN","LAX"], intl: true },
+  AA: { name: "American", hubs: ["DFW","ORD","LAX","MIA","JFK"], intl: true },
+  DL: { name: "Delta", hubs: ["ATL","JFK","LAX","SEA","BOS"], intl: true },
+  WN: { name: "Southwest", hubs: ["DEN","DFW","LAX","BOS"], boarding: 30 },
+  B6: { name: "JetBlue", hubs: ["JFK","BOS"] },
+  AS: { name: "Alaska", hubs: ["SEA","SFO","LAX"] },
+  NK: { name: "Spirit", hubs: ["MIA","DFW","LAX"] },
+  F9: { name: "Frontier", hubs: ["DEN","MIA"] },
+  HA: { name: "Hawaiian", hubs: ["LAX","SEA"] },
+  BA: { name: "British Airways", hubs: ["JFK","SFO","BOS"], intl: true },
+  LH: { name: "Lufthansa", hubs: ["JFK","SFO","ORD"], intl: true },
+  AF: { name: "Air France", hubs: ["JFK","LAX"], intl: true },
+  JL: { name: "Japan Airlines", hubs: ["LAX","SFO"], intl: true },
+};
+const AIRLINE_WORDS = { united: "UA", american: "AA", delta: "DL", southwest: "WN", jetblue: "B6", alaska: "AS", spirit: "NK", frontier: "F9", hawaiian: "HA", british: "BA", lufthansa: "LH", airfrance: "AF", jal: "JL" };
+const DEST_POOL = ["LAS","MCO","EWR","PHX","IAH","MSP","DCA","AUS","SAN","HNL"];
+const INTL_POOL = ["LHR","CDG","NRT"];
+
+/* Demo departures shown on the home board. Offsets are minutes from now,
+   so the board is always live no matter when the page is opened. */
+const DEMO = [
+  { ident: "UA1523", origin: "SFO", dest: "ORD", offset: 130, gate: "F11", delay: 0 },
+  { ident: "DL402",  origin: "JFK", dest: "LAX", offset: 65,  gate: "B24", delay: 35 },
+  { ident: "AA2716", origin: "ORD", dest: "DFW", offset: 220, gate: "K5",  delay: 0 },
+  { ident: "WN1188", origin: "DEN", dest: "LAS", offset: 34,  gate: "C38", delay: 0 },
+  { ident: "AS21",   origin: "SEA", dest: "SFO", offset: 260, gate: "N12", delay: 0 },
+  { ident: "B6915",  origin: "BOS", dest: "SFO", offset: 100, gate: "C25", delay: 12 },
+  { ident: "DL1247", origin: "ATL", dest: "MCO", offset: 170, gate: "A10", delay: 0 },
+  { ident: "BA286",  origin: "SFO", dest: "LHR", offset: 195, gate: "A8",  delay: 0 },
+];
+
+/* ============================================================
+   Utilities
+   ============================================================ */
+const MIN = 60000;
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+function hash(str) { let h = 2166136261; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rand(seed) { let t = seed + 0x6D2B79F5; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+/* Smooth value noise over 10-minute buckets so live numbers drift instead of jumping. */
+function noise(key, t, bucketMin = 10) {
+  const b = t / (bucketMin * MIN); const i = Math.floor(b); const f = b - i; const s = f * f * (3 - 2 * f);
+  const a = rand(hash(key + ":" + i)), c = rand(hash(key + ":" + (i + 1)));
+  return a + (c - a) * s;
+}
+
+function tzParts(d, tz) {
+  const p = new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", minute: "numeric", hour12: false, weekday: "short", timeZoneName: "short" }).formatToParts(d);
+  const g = t => (p.find(x => x.type === t) || {}).value;
+  return { hour: (+g("hour") % 24) + (+g("minute")) / 60, dow: ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(g("weekday")), abbr: g("timeZoneName") };
+}
+function fmtTime(d, tz) { return new Intl.DateTimeFormat("en-US", { timeZone: tz, hour: "numeric", minute: "2-digit" }).format(d); }
+function fmtTimeParts(d, tz) { const s = fmtTime(d, tz); const m = s.match(/^(.*?)\s*(AM|PM)$/i); return m ? { t: m[1], ap: m[2] } : { t: s, ap: "" }; }
+function fmtDur(min) { min = Math.round(min); if (min < 60) return `${min} min`; const h = Math.floor(min / 60), m = min % 60; return m ? `${h} h ${m} min` : `${h} h`; }
+function fmtRel(ms) { const m = Math.round(ms / MIN); if (Math.abs(m) < 1) return "now"; return m > 0 ? `in ${fmtDur(m)}` : `${fmtDur(-m)} ago`; }
+function ago(ms) { const s = Math.max(0, Math.round((Date.now() - ms) / 1000)); return s < 60 ? `${s}s ago` : `${Math.round(s / 60)} min ago`; }
+function dateStr(d, tz) { return new Intl.DateTimeFormat("en-CA", { timeZone: tz, year: "numeric", month: "2-digit", day: "2-digit" }).format(d); }
+
+function parseIdent(q) {
+  let s = String(q || "").trim().toLowerCase().replace(/\s+/g, "");
+  for (const [w, code] of Object.entries(AIRLINE_WORDS)) if (s.startsWith(w)) { s = code.toLowerCase() + s.slice(w.length); break; }
+  const m = s.toUpperCase().match(/^([A-Z0-9]{2})\s*0*(\d{1,4})[A-Z]?$/);
+  return m ? m[1] + m[2] : null;
+}
+function gateConcourse(code, gate) {
+  const ap = AIRPORTS[code]; if (!ap || !gate) return null;
+  const g = String(gate).toUpperCase();
+  if (ap.numeric) { const n = parseInt(g, 10); if (!isNaN(n)) { const r = ap.numeric.find(([a, b]) => n >= a && n <= b); return r ? r[2] : null; } }
+  const m = g.match(/^([A-Z]+)/); return m ? m[1] : null;
+}
+
+/* ============================================================
+   Persistent preferences
+   ============================================================ */
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("leaveby:" + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem("leaveby:" + k, JSON.stringify(v)); } catch {} },
+};
+const prefs = Object.assign({ lane: "std", travel: 35, bag: false, buffer: 15, day: "today" }, store.get("prefs", {}));
+const savePrefs = () => store.set("prefs", prefs);
+let recents = store.get("recents", []);
+
+/* ============================================================
+   Simulation (used whenever no live provider answers)
+   ============================================================ */
+function curveAt(h, profile) {
+  const peaks = profile === "leisure" ? [[6, 1.0, 1.4], [11, .6, 2], [16, .7, 2.2]]
+    : profile === "intl" ? [[6.5, .6, 1.5], [12, .6, 2], [17.5, 1.0, 2.2], [21, .5, 1.5]]
+    : [[6.5, 1.0, 1.3], [11.5, .6, 2], [16.5, .85, 2]];
+  let v = .12; for (const [c, a, w] of peaks) v += a * Math.exp(-((h - c) ** 2) / (2 * w * w)); return v;
+}
+const DOW = [1.1, 1.15, .9, .9, 1.15, 1.1, .85];
+function simLaneWait(code, cp, when, lane, withNoise = true) {
+  const ap = AIRPORTS[code]; const { hour, dow } = tzParts(when, ap.tz);
+  if (hour < cp.hours[0] || hour >= cp.hours[1]) return null;
+  let std = ap.base * cp.f * curveAt(hour, ap.profile) * DOW[dow];
+  if (withNoise) std *= .75 + .5 * noise(cp.id, when.getTime());
+  std = Math.max(2, std);
+  if (lane === "pre") return Math.max(2, std * .35 + 1);
+  if (lane === "clear") return Math.max(1, std * .22 + 1);
+  return std;
+}
+function simWaits(code, when = new Date()) {
+  const ap = AIRPORTS[code];
+  return {
+    airport: code, updated: Date.now() - Math.round(rand(hash(code + Math.floor(when / (5 * MIN)))) * 4 * MIN), source: "demo",
+    granularity: "checkpoint",
+    checkpoints: ap.checkpoints.map(cp => {
+      const lanes = {}; for (const l of ["std", "pre", "clear"]) {
+        if (!cp.lanes.includes(l)) { lanes[l] = null; continue; }
+        const now = simLaneWait(code, cp, when, l), prev = simLaneWait(code, cp, new Date(when - 15 * MIN), l);
+        lanes[l] = now == null ? null : { min: Math.round(now), trend: prev == null ? 0 : Math.sign(Math.round(now) - Math.round(prev)) };
+      }
+      return { id: cp.id, open: lanes.std !== null || lanes.pre !== null, lanes };
+    }),
+  };
+}
+
+function simFlight(ident, day) {
+  const demo = DEMO.find(d => d.ident === ident);
+  const code = ident.slice(0, 2), num = ident.slice(2);
+  const al = AIRLINES[code] || { name: code + " Airlines", hubs: ORIGINS };
+  const seed = hash(ident);
+  const origin = demo ? demo.origin : al.hubs[seed % al.hubs.length];
+  const intl = !demo && al.intl && rand(seed + 3) < .25;
+  let dest = demo ? demo.dest : (intl ? INTL_POOL[seed % INTL_POOL.length] : DEST_POOL[(seed >> 3) % DEST_POOL.length]);
+  if (dest === origin) dest = "DEN";
+  const ap = AIRPORTS[origin];
+  // Anchor scheduled time to a clock minute so it reads like a real schedule.
+  const base = demo ? demo.offset : 45 + Math.floor(rand(seed + 1) * 330);
+  const sched = new Date(Math.round((Date.now() + base * MIN) / (5 * MIN)) * 5 * MIN + (day === "tomorrow" ? 24 * 60 * MIN : 0));
+  // Delay: fixed per flight with slow drift so alerts occur naturally.
+  let delay = demo ? demo.delay : (rand(seed + 2) < .3 ? 10 + Math.floor(rand(seed + 4) * 50) : 0);
+  if (delay) delay += Math.round(noise(ident + ":drift", Date.now(), 20) * 10 - 5);
+  const est = new Date(sched.getTime() + Math.max(0, delay) * MIN);
+  const cps = ap.checkpoints; const cpSeed = cps[seed % cps.length];
+  let gate = demo ? demo.gate : null;
+  if (!gate) {
+    const cons = Object.keys(cpSeed.walk); const con = cons[(seed >> 5) % cons.length];
+    gate = ap.numeric ? String((ap.numeric.find(r => r[2] === con) || [1])[0] + 1 + (seed % 8)) : con + (1 + (seed % 30));
+  }
+  // Gate change event: some flights swap gate 90 min before departure.
+  let gateChanged = false;
+  if (!demo && rand(seed + 7) < .2 && est - Date.now() < 90 * MIN) { const m = gate.match(/^([A-Z]*)(\d+)$/); if (m) { gate = m[1] + (+m[2] + 4); gateChanged = true; } }
+  const cp = cps.find(c => c.walk[gateConcourse(origin, gate)]) || cps[0];
+  const toDep = est - Date.now();
+  const isIntl = !!AIRPORTS[dest] && !["America", "Pacific/Honolulu"].some(p => AIRPORTS[dest].tz.startsWith(p));
+  const boardingLead = al.boarding || (isIntl ? 60 : 40);
+  let status = "Scheduled";
+  if (toDep < -5 * MIN) status = "Departed";
+  else if (toDep < 15 * MIN) status = "Final call";
+  else if (toDep < boardingLead * MIN) status = "Boarding";
+  else if (delay > 0) status = "Delayed";
+  else status = "On time";
+  return {
+    ident, airline: { code, name: al.name }, number: num, status, source: "demo", international: isIntl,
+    boardingLead, doorClose: isIntl ? 20 : 15, bagCutoff: isIntl ? 60 : 45,
+    departure: { airport: origin, terminal: cp.terminal, gate, scheduled: sched.toISOString(), estimated: est.toISOString(), delay: Math.max(0, delay), gateChanged },
+    arrival: { airport: dest, scheduled: new Date(sched.getTime() + (isIntl ? 620 : 150 + (seed % 200)) * MIN).toISOString() },
+    aircraft: ["Boeing 737-900", "Airbus A321neo", "Boeing 787-9", "Airbus A320", "Boeing 737 MAX 8", "Embraer 175"][seed % 6],
+    fetched: Date.now(),
+  };
+}
+
+/* ============================================================
+   Data access: live API when served by server.mjs, demo otherwise
+   ============================================================ */
+const live = { flight: null, waits: null };
+async function api(path) {
+  if (location.protocol !== "http:" && location.protocol !== "https:") throw new Error("offline");
+  const ctl = new AbortController(); const t = setTimeout(() => ctl.abort(), 6000);
+  try { const r = await fetch(path, { signal: ctl.signal, headers: { accept: "application/json" } }); if (!r.ok) throw new Error(String(r.status)); return await r.json(); }
+  finally { clearTimeout(t); }
+}
+async function getFlight(ident, day) {
+  const sim = simFlight(ident, day);
+  try {
+    const date = dateStr(new Date(Date.now() + (day === "tomorrow" ? 864e5 : 0)), AIRPORTS[sim.departure.airport].tz);
+    const f = await api(`/api/flight?ident=${encodeURIComponent(ident)}&date=${date}`);
+    if (f && f.departure && f.departure.airport) { live.flight = f.source; f.fetched = Date.now(); return normalizeFlight(f); }
+  } catch {}
+  live.flight = null; return sim;
+}
+function normalizeFlight(f) {
+  const code = f.departure.airport; const ap = AIRPORTS[code];
+  const dest = f.arrival && f.arrival.airport; const isIntl = !!(dest && AIRPORTS[dest] && !AIRPORTS[dest].tz.startsWith("America") && AIRPORTS[dest].tz !== "Pacific/Honolulu") || !!f.international;
+  const al = AIRLINES[f.ident.slice(0, 2)] || {};
+  return Object.assign({ boardingLead: al.boarding || (isIntl ? 60 : 40), doorClose: isIntl ? 20 : 15, bagCutoff: isIntl ? 60 : 45, international: isIntl }, f,
+    { departure: Object.assign({ delay: Math.max(0, Math.round((new Date(f.departure.estimated || f.departure.scheduled) - new Date(f.departure.scheduled)) / MIN)) }, f.departure) });
+}
+async function getWaits(code) {
+  const sim = simWaits(code);
+  try {
+    const w = await api(`/api/waits/${code}`);
+    if (w && w.checkpoints) { live.waits = w.source; return mergeWaits(code, w, sim); }
+  } catch {}
+  live.waits = null; return sim;
+}
+/* Live feeds rarely name every checkpoint the way the airport does; match
+   by normalized name, and fall back to an airport-wide number when that is
+   all the provider gives. */
+function mergeWaits(code, w, sim) {
+  const norm = s => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+  const out = { airport: code, updated: w.updated || Date.now(), source: w.source || "live", granularity: w.granularity || "checkpoint", checkpoints: [] };
+  for (const s of sim.checkpoints) {
+    const cp = AIRPORTS[code].checkpoints.find(c => c.id === s.id);
+    const m = w.checkpoints.find(x => x.id === s.id || (x.name && (norm(x.name) === norm(cp.name) || norm(cp.name).includes(norm(x.name)) || norm(x.name).includes(norm(cp.name.split("·")[0]))))) || (w.granularity === "airport" ? w.checkpoints[0] : null);
+    if (!m) { out.checkpoints.push(Object.assign({}, s, { estimated: true })); continue; }
+    const lanes = {};
+    for (const l of ["std", "pre", "clear"]) { const v = m.lanes && m.lanes[l]; lanes[l] = !cp.lanes.includes(l) ? null : v == null ? (s.lanes[l] ? Object.assign({}, s.lanes[l], { estimated: true }) : null) : { min: Math.round(v.min), trend: v.trend || 0 }; }
+    out.checkpoints.push({ id: s.id, open: m.open !== false, lanes });
+  }
+  return out;
+}
+
+/* ============================================================
+   The bridge: turn a flight + live waits + your prefs into a plan
+   ============================================================ */
+const CURB = 8, BAGDROP = 12;
+function computePlan(flight, waits, p, forcedCp) {
+  const code = flight.departure.airport; const ap = AIRPORTS[code];
+  const dep = new Date(flight.departure.estimated || flight.departure.scheduled);
+  const boarding = new Date(dep - flight.boardingLead * MIN);
+  const doorClose = new Date(dep - flight.doorClose * MIN);
+  const con = gateConcourse(code, flight.departure.gate);
+  const lane = p.lane;
+  const now = Date.now();
+  const options = ap.checkpoints.map(cp => {
+    const w = waits.checkpoints.find(x => x.id === cp.id) || { open: false, lanes: {} };
+    const laneUsed = lane === "clear" ? (cp.lanes.includes("clear") ? "clear" : cp.lanes.includes("pre") ? "pre" : "std") : lane === "pre" ? (cp.lanes.includes("pre") ? "pre" : "std") : "std";
+    const nowWait = w.open && w.lanes[laneUsed] ? w.lanes[laneUsed].min : null;
+    const walk = con && cp.walk[con] != null ? cp.walk[con] : (Math.max(...Object.values(cp.walk)) + 6);
+    const sameTerminal = con ? cp.walk[con] != null : cp.terminal === flight.departure.terminal;
+    // When will you actually reach this checkpoint? Roughly the later of
+    // "leaving now" and "leaving just in time", using the current wait as a first guess.
+    const arrive = new Date(Math.max(now + (p.travel + CURB + (p.bag ? BAGDROP : 0)) * MIN, boarding - (p.buffer + walk + (nowWait == null ? 15 : nowWait)) * MIN));
+    let wait = nowWait, predicted = false;
+    if (arrive - now > 45 * MIN || nowWait == null) {
+      const f = forecastWait(code, cp, laneUsed, arrive, nowWait);
+      if (f != null) { wait = Math.round(f); predicted = true; }
+      else if (arrive - now > 45 * MIN) wait = null; // closed when you would get there
+    }
+    return { cp, w, laneUsed, wait, nowWait, arrive, predicted, walk, sameTerminal, open: wait != null, total: wait == null ? Infinity : wait + walk, estimated: !!(w.lanes[laneUsed] && w.lanes[laneUsed].estimated) };
+  }).sort((a, b) => a.total - b.total || a.walk - b.walk);
+  const rec = options.find(o => o.open) || options[0];
+  const chosen = (forcedCp && options.find(o => o.cp.id === forcedCp && o.open)) || rec;
+  const wait = chosen.wait == null ? 20 : chosen.wait, walk = chosen.walk;
+
+  // Backward from boarding: when must each step begin?
+  const atGate = new Date(boarding - p.buffer * MIN);
+  const throughSec = new Date(atGate - walk * MIN);
+  const atCheckpoint = new Date(throughSec - wait * MIN);
+  const atBagDrop = p.bag ? new Date(atCheckpoint - BAGDROP * MIN) : null;
+  const atCurb = new Date((atBagDrop || atCheckpoint) - CURB * MIN);
+  let leaveBy = new Date(atCurb - p.travel * MIN);
+  // A checked bag has its own cutoff, independent of the security queue.
+  const bagCutoff = p.bag ? new Date(dep - flight.bagCutoff * MIN) : null;
+  let binding = "gate";
+  if (bagCutoff && atBagDrop > bagCutoff) { const shift = atBagDrop - bagCutoff; leaveBy = new Date(leaveBy - shift); binding = "bag"; }
+
+  const slackMin = (leaveBy - now) / MIN;
+  // Forward from now: if leaving immediately, when would you reach the gate?
+  const gateIfNow = now + (p.travel + CURB + (p.bag ? BAGDROP : 0) + wait + walk) * MIN;
+  let state, headline, detail;
+  if (flight.status === "Departed" || flight.status === "Cancelled") { state = "past"; headline = flight.status; detail = flight.status === "Departed" ? "This flight has already left the gate." : "This flight is cancelled. Talk to the airline about rebooking."; }
+  else if (slackMin >= 20) { state = "good"; headline = "On track"; detail = `Leave in ${fmtDur(slackMin)} and you'll be at the gate ${p.buffer} min before boarding.`; }
+  else if (slackMin >= 0) { state = "warn"; headline = "Tight"; detail = `Only ${fmtDur(slackMin)} until you need to leave. Get ready now.`; }
+  else if (gateIfNow <= doorClose - 2 * MIN) { state = "warn"; headline = "Leave now"; detail = `Leaving this minute, you reach ${flight.departure.gate ? "gate " + flight.departure.gate : "the gate"} ${fmtDur((doorClose - gateIfNow) / MIN)} before the door closes. No buffer left.`; }
+  else { state = "bad"; headline = "Likely missed"; detail = `Even leaving now, you'd reach the gate about ${fmtDur((gateIfNow - doorClose) / MIN)} after the door closes. Call the airline to rebook.`; }
+  if (state !== "past" && binding === "bag") detail += ` Bag drop closes at ${fmtTime(bagCutoff, ap.tz)}, which is what sets this time.`;
+
+  // Forward timeline from leaveBy (or from now when late) for the step list.
+  const start = slackMin >= 0 ? leaveBy : new Date(now);
+  let t = start.getTime(); const steps = [];
+  const push = (title, at, desc, kind) => steps.push({ title, at: new Date(at), desc, kind });
+  push("Leave for " + code, t, `${p.travel} min to the airport`, "leave");
+  t += p.travel * MIN; push("Arrive at the curb", t, `${CURB} min to reach the checkpoint`, "curb");
+  if (p.bag) { push("Drop your bag", t, `${BAGDROP} min · counters close ${fmtTime(bagCutoff, ap.tz)}`, "bag"); t += BAGDROP * MIN; }
+  t += CURB * MIN; push("Join " + chosen.cp.name.split(" · ").pop(), t, chosen.predicted ? `~${wait} min ${laneName(chosen.laneUsed)} wait expected at ${fmtTime(new Date(t), ap.tz)}` + (chosen.nowWait != null ? ` · ${chosen.nowWait} min now` : " · closed now") : `${wait} min ${laneName(chosen.laneUsed)} wait`, chosen.predicted ? "forecast" : "wait", chosen);
+  t += wait * MIN; push("Through security", t, `${walk} min walk to ${flight.departure.gate ? "gate " + flight.departure.gate : "the gate"}`, "walk");
+  t += walk * MIN; push("At the gate", t, slackMin >= 0 ? `${fmtDur((boarding - t) / MIN)} of buffer before boarding` : (t <= doorClose ? `${fmtDur((doorClose - t) / MIN)} before the door closes` : `${fmtDur((t - doorClose) / MIN)} after the door closed`), "gate");
+  push("Boarding begins", boarding, `${flight.boardingLead} min before departure`, "hard");
+  push("Door closes", doorClose, `${flight.doorClose} min before departure`, "hard");
+  push("Departs", dep, flight.departure.delay ? `${flight.departure.delay} min behind schedule` : "on schedule", "hard");
+
+  const segs = [
+    { k: "travel", min: p.travel, label: "drive" }, { k: "curb", min: CURB, label: "curb" },
+    ...(p.bag ? [{ k: "bag", min: BAGDROP, label: "bag" }] : []),
+    { k: "wait", min: wait, label: "security" }, { k: "walk", min: walk, label: "walk" },
+    { k: "buffer", min: Math.max(0, (boarding - (start.getTime() + (p.travel + CURB + (p.bag ? BAGDROP : 0) + wait + walk) * MIN)) / MIN), label: "buffer" },
+    { k: "boarding", min: (doorClose - boarding) / MIN, label: "boarding" }, { k: "close", min: flight.doorClose, label: "door" },
+  ];
+  return { state, headline, detail, leaveBy, slackMin, atCheckpoint, boarding, doorClose, dep, chosen, rec, options, steps, segs, start, wait, walk, lane: chosen.laneUsed, binding, bagCutoff };
+}
+/* Wait expected at a later arrival: today's typical curve at that time,
+   scaled by how far the live reading sits from typical right now. */
+function forecastWait(code, cp, lane, at, nowWait) {
+  const typAt = simLaneWait(code, cp, at, lane, false);
+  if (typAt == null) return null;
+  const typNow = simLaneWait(code, cp, new Date(), lane, false);
+  if (nowWait == null || typNow == null || typNow < 2) return typAt;
+  return typAt * clamp(nowWait / typNow, .6, 1.6);
+}
+const laneName = l => ({ std: "standard", pre: "TSA PreCheck", clear: "CLEAR" }[l] || "standard");
+const laneShort = l => ({ std: "Standard", pre: "PreCheck", clear: "CLEAR" }[l] || "Standard");
+
+/* ============================================================
+   App state, routing, rendering
+   ============================================================ */
+const view = $("#view");
+const state = { route: "#/", flight: null, waits: null, plan: null, forcedCp: null, alerts: [], snapshot: null, timer: null, apCode: null, apCp: null, apLane: null, loading: false };
+const ICON = {
+  plane: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 19h19"/><path d="M3.8 13.1l3.6 1.2 4.4 2.6 8-4.4c1-.6 1.6-1.6 1.2-2.4-.5-.8-1.7-.9-2.7-.4l-3.2 1.8-8-3.9-2 1 5 4-2.8 1.6-2.6-1.2z"/></svg>',
+  shield: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+  arrow: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><path d="M14 6l6 6-6 6"/></svg>',
+};
+
+function navigate(hash) { if (location.hash !== hash) location.hash = hash; else route(); }
+function route() {
+  const h = location.hash || "#/"; state.route = h;
+  clearInterval(state.timer); state.timer = null;
+  const m = h.match(/^#\/flight\/([A-Z0-9]+)(?:\/(today|tomorrow))?$/);
+  const a = h.match(/^#\/airport\/([A-Z]{3})$/);
+  if (m) return openFlight(m[1], m[2] || prefs.day);
+  if (a && AIRPORTS[a[1]] && AIRPORTS[a[1]].checkpoints) return openAirport(a[1]);
+  renderHome();
+}
+window.addEventListener("hashchange", route);
+
+/* ---------- Home ---------- */
+function renderHome() {
+  const now = new Date();
+  const board = DEMO.map(d => simFlight(d.ident, "today")).filter(f => f.status !== "Departed").slice(0, 8);
+  const saved = recents.filter(r => !DEMO.some(d => d.ident === r.ident)).slice(0, 4).map(r => simFlight(r.ident, "today"));
+  const waitsNow = ORIGINS.map(c => { const w = simWaits(c, now); const open = w.checkpoints.filter(x => x.lanes.std); const best = open.length ? Math.min(...open.map(x => x.lanes.std.min)) : null; return { c, best }; });
+  view.innerHTML = `
+    <div class="stack">
+      <section class="hero">
+        <div class="eyebrow">Flight status + security lines, on one clock</div>
+        <h1>When do you actually need to leave?</h1>
+        <p>Enter your flight. Leaveby reads its live departure time and gate, checks every checkpoint at your terminal, and works backward to the minute you should walk out the door.</p>
+        <form id="herosearch">
+          <label class="sr" for="hq">Flight number</label>
+          <input id="hq" placeholder="Flight number, e.g. DL 402" autocomplete="off" spellcheck="false">
+          <button class="go" type="submit">Check my flight</button>
+        </form>
+        <div class="chips" role="group" aria-label="Options">
+          <button class="chip" data-day="today" aria-pressed="${prefs.day === "today"}">Today</button>
+          <button class="chip" data-day="tomorrow" aria-pressed="${prefs.day === "tomorrow"}">Tomorrow</button>
+          <button class="chip" data-lane="pre" aria-pressed="${prefs.lane === "pre"}">${ICON.shield} TSA PreCheck</button>
+          <button class="chip" data-lane="clear" aria-pressed="${prefs.lane === "clear"}">CLEAR</button>
+        </div>
+      </section>
+
+      ${saved.length ? `<section class="card"><div class="card-h"><h2>Your flights</h2><span class="muted small">Recently checked</span></div><div class="board">${saved.map(flightCard).join("")}</div></section>` : ""}
+
+      <section class="card">
+        <div class="card-h"><h2>Departing soon</h2><span class="pill live"><span class="d"></span>Live board</span></div>
+        <div class="board">${board.map(flightCard).join("")}</div>
+        <p class="small muted" style="margin-top:12px">Sample departures. Any flight number works, and these refresh with the clock.</p>
+      </section>
+
+      <section class="card">
+        <div class="card-h"><h2>Security right now</h2><span class="muted small">Shortest standard lane</span></div>
+        <div class="apgrid">${waitsNow.map(({ c, best }) => `
+          <button class="ap" data-nav="#/airport/${c}">
+            <span class="code">${c}</span>
+            <span class="name">${esc(AIRPORTS[c].city)}</span>
+            <span class="w">${best == null ? "—" : best}<small>${best == null ? "closed" : "min"}</small></span>
+          </button>`).join("")}
+        </div>
+      </section>
+
+      <div class="notice"><b>Prototype.</b> Flight and wait data here are simulated from real airport layouts and daily wait patterns. Run <span class="mono">server.mjs</span> with provider keys to swap in live flight status and TSA wait feeds; the interface is unchanged.</div>
+    </div>`;
+  $("#herosearch").addEventListener("submit", e => { e.preventDefault(); goSearch($("#hq").value); });
+  $("#hq").focus({ preventScroll: true });
+}
+function flightCard(f) {
+  const tz = AIRPORTS[f.departure.airport].tz;
+  const est = new Date(f.departure.estimated), sch = new Date(f.departure.scheduled);
+  const pc = f.status === "Delayed" ? "warn" : f.status === "Boarding" || f.status === "Final call" ? "good" : "";
+  return `<button class="fl" data-nav="#/flight/${f.ident}">
+    <div class="l2"><span class="ident">${f.ident.slice(0, 2)} ${f.ident.slice(2)}</span><span class="pill ${pc}">${esc(f.status)}${f.departure.delay ? " " + f.departure.delay + "m" : ""}</span></div>
+    <div class="route">${f.departure.airport} → ${f.arrival.airport} · ${esc(f.airline.name)}</div>
+    <div class="l2"><span class="when">${f.departure.delay ? `<s class="muted">${fmtTime(sch, tz)}</s> ` : ""}${fmtTime(est, tz)} <span class="muted">${tzParts(est, tz).abbr}</span></span><span class="muted small">${fmtRel(est - Date.now())}</span></div>
+  </button>`;
+}
+function goSearch(q) {
+  const ident = parseIdent(q);
+  if (!ident) { toast("Enter an airline code and number, like UA 1523."); return; }
+  navigate(`#/flight/${ident}/${prefs.day}`);
+}
+
+/* ---------- Flight ---------- */
+async function openFlight(ident, day) {
+  state.forcedCp = null; state.alerts = []; state.snapshot = null; state.loading = true;
+  view.innerHTML = `<div class="card"><div class="row"><span class="pill live"><span class="d"></span>Checking</span><span class="muted">${ident.slice(0, 2)} ${ident.slice(2)} · flight status and checkpoint waits</span></div></div>`;
+  await refreshFlight(ident, day, true);
+  state.loading = false;
+  state.timer = setInterval(() => refreshFlight(ident, day, false), 30000);
+}
+async function refreshFlight(ident, day, first) {
+  const flight = await getFlight(ident, day);
+  const waits = await getWaits(flight.departure.airport);
+  if (state.route !== location.hash) return;
+  state.flight = flight; state.waits = waits;
+  const plan = computePlan(flight, waits, prefs, state.forcedCp);
+  if (!first) diffSnapshot(plan);
+  state.plan = plan; state.snapshot = snap(plan);
+  if (first) { recents = [{ ident, at: Date.now() }, ...recents.filter(r => r.ident !== ident)].slice(0, 8); store.set("recents", recents); }
+  renderFlight();
+}
+function snap(p) { return { est: p.dep.getTime(), gate: state.flight.departure.gate, rec: p.rec.cp.id, wait: p.wait, state: p.state, leave: p.leaveBy.getTime() }; }
+function diffSnapshot(p) {
+  const s = state.snapshot; if (!s) return; const tz = AIRPORTS[state.flight.departure.airport].tz;
+  const add = (kind, text) => state.alerts.unshift({ at: Date.now(), kind, text });
+  const dEst = Math.round((p.dep.getTime() - s.est) / MIN);
+  if (dEst) add(dEst > 0 ? "warn" : "good", `Departure ${dEst > 0 ? "pushed back" : "moved up"} ${Math.abs(dEst)} min to ${fmtTime(p.dep, tz)}. Leave-by is now ${fmtTime(p.leaveBy, tz)}.`);
+  if (state.flight.departure.gate !== s.gate) add("warn", `Gate changed to ${state.flight.departure.gate}. Walk time recalculated.`);
+  if (p.rec.cp.id !== s.rec) add("good", `${p.rec.cp.name} is now the faster checkpoint.`);
+  if (Math.abs(p.wait - s.wait) >= 5) add(p.wait > s.wait ? "warn" : "good", `${p.chosen.cp.name.split(" · ").pop()} ${laneShort(p.lane)} wait ${p.wait > s.wait ? "grew" : "dropped"} to ${p.wait} min.`);
+  if (p.state !== s.state && p.state !== "good") add(p.state, `Status changed: ${p.headline}.`);
+}
+function renderFlight() {
+  const f = state.flight, p = state.plan, ap = AIRPORTS[f.departure.airport], tz = ap.tz;
+  const abbr = tzParts(new Date(), tz).abbr;
+  const sch = new Date(f.departure.scheduled), est = p.dep;
+  const spc = f.status === "Delayed" || f.status === "Cancelled" ? "warn" : f.status === "Boarding" || f.status === "Final call" ? "good" : "";
+  const lb = fmtTimeParts(p.leaveBy, tz);
+  const total = p.segs.reduce((a, s) => a + s.min, 0);
+  const nowPct = clamp((Date.now() - p.start.getTime()) / MIN / total * 100, 0, 100);
+  const dest = AIRPORTS[f.arrival.airport] || { city: f.arrival.airport };
+  const scroll = view.scrollTop;
+  view.innerHTML = `
+    <div class="stack">
+        <section class="card fhead">
+          <div class="l1">
+            <span class="ident">${f.ident.slice(0, 2)} ${f.ident.slice(2)}</span>
+            <span class="airline">${esc(f.airline.name)}${f.aircraft ? " · " + esc(f.aircraft) : ""}</span>
+            <span class="pill ${spc}" style="margin-left:auto">${esc(f.status)}${f.departure.delay ? " · " + f.departure.delay + " min" : ""}</span>
+          </div>
+          <div class="route-big">
+            <div>
+              <div class="code">${f.departure.airport}</div>
+              <div class="city">${esc(ap.city)}</div>
+              <div class="t">${f.departure.delay ? `<s>${fmtTime(sch, tz)}</s>` : ""}<span>${fmtTime(est, tz)}</span>${f.departure.delay ? `<span class="delta">+${f.departure.delay}</span>` : ""}</div>
+            </div>
+            <div class="plane">${ICON.arrow}</div>
+            <div class="to">
+              <div class="code">${f.arrival.airport}</div>
+              <div class="city">${esc(dest.city)}</div>
+              <div class="t" style="justify-content:flex-end">${f.arrival.scheduled ? `<span>${fmtTime(new Date(f.arrival.scheduled), (AIRPORTS[f.arrival.airport] || ap).tz)}</span>` : ""}</div>
+            </div>
+          </div>
+          <div class="facts">
+            <div class="fact"><div class="k">Terminal</div><div class="v">${esc(f.departure.terminal || "—")}</div></div>
+            <div class="fact"><div class="k">Gate</div><div class="v ${f.departure.gateChanged ? "changed" : ""}">${esc(f.departure.gate || "TBD")}${f.departure.gateChanged ? " ↺" : ""}</div></div>
+            <div class="fact"><div class="k">Boarding</div><div class="v">${fmtTime(p.boarding, tz)}</div></div>
+            <div class="fact"><div class="k">Door closes</div><div class="v">${fmtTime(p.doorClose, tz)}</div></div>
+          </div>
+          <div class="srcline"><span>Times in ${esc(ap.city)} local (${abbr}) · updated ${ago(f.fetched)}</span>${srcBadge(f.source)}</div>
+        </section>
+    <div class="cols">
+      <div class="stack">
+        <section class="card">
+          <div class="card-h"><h2>Security at ${f.departure.airport}</h2><span class="small muted">Sorted by wait + walk to gate ${esc(f.departure.gate || "")}</span></div>
+          <div class="cps">${p.options.map(o => cpRow(o, p)).join("")}</div>
+          <div class="srcline"><span>Checkpoint waits updated ${ago(state.waits.updated)} · refreshes every 30 s</span>${srcBadge(state.waits.source)}</div>
+          <div style="margin-top:10px"><button class="link" data-nav="#/airport/${f.departure.airport}">See today's wait pattern at ${f.departure.airport}</button></div>
+        </section>
+
+        <section class="card">
+          <div class="card-h"><h2>What changed</h2><span class="small muted">Since you opened this flight</span></div>
+          ${state.alerts.length ? `<ul class="alerts">${state.alerts.slice(0, 6).map(a => `<li class="alert ${a.kind}"><span class="t">${fmtTime(new Date(a.at), tz)}</span><span>${esc(a.text)}</span></li>`).join("")}</ul>` : `<p class="empty">Nothing yet. Delays, gate changes and wait-time swings show up here, and your leave-by time moves with them.</p>`}
+        </section>
+      </div>
+
+      <div class="right stack">
+        <section class="verdict" style="--vc: var(--${p.state === "past" ? "muted" : p.state})">
+          <div class="state"><span class="pill ${p.state === "past" ? "" : p.state}"><span class="d"></span>${esc(p.headline)}</span><span class="in">${p.state === "past" ? "" : p.slackMin >= 0 ? "leave " + fmtRel(p.slackMin * MIN) : "leave-by passed " + fmtDur(-p.slackMin) + " ago"}</span></div>
+          <div>
+            <div class="eyebrow">${p.state === "past" ? "Departure" : "Leave by"}</div>
+            <div class="big">${p.state === "past" ? fmtTimeParts(p.dep, tz).t + `<span class="ampm">${fmtTimeParts(p.dep, tz).ap}</span>` : lb.t + `<span class="ampm">${lb.ap}</span>`}</div>
+          </div>
+          <p class="sub">${esc(p.detail)} ${p.state !== "past" ? `Be at <b>${esc(p.chosen.cp.name.split(" · ").pop())}</b> by <b>${fmtTime(p.atCheckpoint, tz)}</b>.` : ""}</p>
+          <div class="bridge">
+            <div class="bar">
+              ${p.segs.map(s => `<div class="seg ${s.k}" style="flex:${Math.max(s.min, 0.01)} 0 0" title="${s.label} · ${Math.round(s.min)} min"><span>${s.min >= total * .09 ? Math.round(s.min) + "m" : ""}</span></div>`).join("")}
+              ${p.state !== "past" && nowPct > 0 && nowPct < 100 ? `<div class="nowmark" style="left:${nowPct}%"></div>` : ""}
+            </div>
+            <div class="legend"><span><i style="background:#3E5289"></i>to airport</span><span><i style="background:#7D6B2C"></i>security wait</span><span><i style="background:#4A6199"></i>walking</span><span><i style="background:rgba(255,255,255,.2)"></i>buffer</span><span><i style="background:#2F7A57"></i>boarding</span><span><i style="background:#8A3E3E"></i>door</span></div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-h"><h2>Your plan</h2><span class="small muted">${p.slackMin >= 0 ? "Working back from boarding" : "If you leave right now"}</span></div>
+          <ol class="steps">${p.steps.map((s, i) => stepRow(s, i, p, tz)).join("")}</ol>
+        </section>
+
+        <section class="card controls">
+          <div class="card-h" style="margin-bottom:2px"><h2>Adjust</h2><span class="small muted">Saved for next time</span></div>
+          <div class="ctl"><div class="lab"><b>Security lane</b><span>Which line you'll stand in</span></div>
+            <div class="seg-ctl" role="group" aria-label="Security lane">${["std", "pre", "clear"].map(l => `<button data-lane="${l}" aria-pressed="${prefs.lane === l}">${laneShort(l)}</button>`).join("")}</div></div>
+          <div class="ctl"><div class="lab"><b>Door to curb</b><span>Drive, rideshare or transit time</span></div>
+            <div class="stepper"><button data-travel="-5" aria-label="Five minutes less">−</button><output>${prefs.travel} min</output><button data-travel="5" aria-label="Five minutes more">+</button></div></div>
+          <div class="ctl"><div class="lab"><b>Checking a bag</b><span>Adds bag drop and its ${f.bagCutoff}-min cutoff</span></div>
+            <button class="switch" role="switch" aria-checked="${prefs.bag}" data-bag aria-label="Checking a bag"></button></div>
+          <div class="ctl"><div class="lab"><b>Gate buffer</b><span>Time at the gate before boarding</span></div>
+            <div class="stepper"><button data-buffer="-5" aria-label="Five minutes less buffer">−</button><output>${prefs.buffer} min</output><button data-buffer="5" aria-label="Five minutes more buffer">+</button></div></div>
+        </section>
+      </div>
+    </div>
+    </div>`;
+  view.scrollTop = scroll;
+}
+function srcBadge(src) {
+  if (src === "demo") return `<span class="src demo">simulated</span>`;
+  return `<span class="src live"><span class="d"></span>live · ${esc(src || "provider")}</span>`;
+}
+function cpRow(o, p) {
+  const isRec = o.cp.id === p.rec.cp.id, isChosen = o.cp.id === p.chosen.cp.id;
+  const delta = o.open && p.rec.open ? o.total - p.rec.total : null;
+  return `<button class="cp ${isChosen ? "rec" : ""} ${o.open ? "" : "closed"}" data-cp="${o.cp.id}" aria-pressed="${isChosen}">
+    <div>
+      <div class="nm">${esc(o.cp.name)}${isRec ? `<span class="tag">Fastest</span>` : ""}${isChosen && !isRec ? `<span class="tag" style="background:var(--neutral-bg);color:var(--ink-2)">Your pick</span>` : ""}</div>
+      <div class="meta">${o.open ? `${o.walk} min walk to gate${o.sameTerminal ? "" : " · different terminal"}${o.predicted ? ` · ~${o.wait} min expected at ${fmtTime(o.arrive, AIRPORTS[state.flight.departure.airport].tz)}` : ""}${o.estimated ? " · wait estimated" : ""}` : (o.nowWait == null ? "Closed when you'd arrive" : "Closed right now")}</div>
+    </div>
+    <div class="tot">${o.open ? `<b>${o.total}</b><small>min queue + walk</small>${delta ? `<span class="delta">+${delta} vs fastest</span>` : ""}` : `<b>—</b>`}</div>
+    <div class="lanes">${["std", "pre", "clear"].map(l => { const v = o.w.lanes && o.w.lanes[l]; const max = 45; return `<div class="lane ${o.laneUsed === l && o.open ? "sel" : ""} ${v ? "" : "na"}">
+      <div class="lk"><span>${laneShort(l)}</span><span>${v ? `<b>${v.min}</b> ${v.trend > 0 ? '<span class="tr up">▲</span>' : v.trend < 0 ? '<span class="tr down">▼</span>' : ""}` : (o.cp.lanes.includes(l) ? "closed" : "n/a")}</span></div>
+      <div class="track"><div class="fill" style="width:${v ? clamp(v.min / max * 100, 4, 100) : 0}%"></div></div></div>`; }).join("")}</div>
+  </button>`;
+}
+function stepRow(s, i, p, tz) {
+  const now = Date.now(); const t = s.at.getTime();
+  const next = p.steps[i + 1]; const isNow = t <= now && (!next || next.at.getTime() > now);
+  const cls = s.kind === "hard" ? "hard" : t < now && !isNow ? "past" : "";
+  return `<li class="step ${cls} ${isNow ? "now" : ""}">
+    <div class="t">${fmtTime(s.at, tz)}<small>${s.kind === "hard" ? "fixed" : fmtRel(t - now)}</small></div>
+    <div class="n"></div>
+    <div class="b"><div class="title">${esc(s.title)}</div><div class="desc">${s.kind === "wait" ? `<span class="live">${esc(s.desc)}</span> · live` : s.kind === "forecast" ? `<b>${esc(s.desc)}</b>` : esc(s.desc)}</div></div>
+  </li>`;
+}
+
+/* ---------- Airport ---------- */
+async function openAirport(code) {
+  state.apCode = code; state.apLane = prefs.lane;
+  state.waits = await getWaits(code);
+  if (state.route !== location.hash) return;
+  const open = state.waits.checkpoints.filter(c => c.open);
+  state.apCp = state.apCp && open.some(c => c.id === state.apCp) ? state.apCp : (open[0] || state.waits.checkpoints[0]).id;
+  renderAirport();
+  state.timer = setInterval(async () => { state.waits = await getWaits(code); if (state.route === location.hash) renderAirport(); }, 30000);
+}
+function renderAirport() {
+  const code = state.apCode, ap = AIRPORTS[code], tz = ap.tz, w = state.waits, lane = state.apLane;
+  const cp = ap.checkpoints.find(c => c.id === state.apCp);
+  const cur = w.checkpoints.find(c => c.id === cp.id);
+  const laneUsed = cur.lanes[lane] ? lane : cur.lanes.std ? "std" : null;
+  const now = new Date(); const { hour, abbr } = tzParts(now, tz);
+  // Typical curve for today at 15-min resolution, in airport local time
+  const pts = []; for (let h = 0; h <= 24; h += .25) { const when = new Date(now.getTime() + (h - hour) * 3600000); const v = simLaneWait(code, cp, when, laneUsed || "std", false); pts.push({ h, v: v == null ? null : v }); }
+  const maxV = Math.max(10, ...pts.map(q => q.v || 0)) * 1.15;
+  const W = 640, H = 220, L = 34, R = 12, T = 18, B = 30;
+  const x = h => L + (h / 24) * (W - L - R), y = v => T + (1 - v / maxV) * (H - T - B);
+  let path = "", area = "", open = false;
+  pts.forEach(q => { if (q.v == null) { open = false; return; } const c = `${x(q.h).toFixed(1)} ${y(q.v).toFixed(1)}`; if (!open) { if (area) area += ` L ${x(pts[pts.indexOf(q) - 1] ? pts[pts.indexOf(q) - 1].h : q.h).toFixed(1)} ${y(0)} Z`; path += ` M ${c}`; area += ` M ${x(q.h).toFixed(1)} ${y(0)} L ${c}`; open = true; } else { path += ` L ${c}`; area += ` L ${c}`; } });
+  if (open) area += ` L ${x(pts[pts.length - 1].h).toFixed(1)} ${y(0)} Z`;
+  // Best window in the next 6 hours: lowest 60-minute average
+  let best = null; for (let i = 0; i < pts.length - 4; i++) { const seg = pts.slice(i, i + 4); if (seg[0].h < hour || seg[0].h > hour + 6 || seg.some(q => q.v == null)) continue; const avg = seg.reduce((a, q) => a + q.v, 0) / 4; if (!best || avg < best.avg) best = { h: seg[0].h, avg }; }
+  const fmtH = h => fmtTime(new Date(now.getTime() + (h - hour) * 3600000), tz);
+  const liveV = laneUsed && cur.lanes[laneUsed] ? cur.lanes[laneUsed].min : null;
+  const ticks = [0, 3, 6, 9, 12, 15, 18, 21, 24];
+  const yt = []; for (let v = 0; v < maxV; v += maxV > 60 ? 20 : maxV > 30 ? 10 : 5) yt.push(Math.round(v));
+  const busiest = pts.filter(q => q.v != null).reduce((a, q) => (!a || q.v > a.v ? q : a), null);
+  view.innerHTML = `
+    <div class="stack">
+      <section class="aphead">
+        <div class="eyebrow">${esc(ap.name)}</div>
+        <h1>${code} security now</h1>
+        <p class="muted">${w.checkpoints.filter(c => c.open).length} of ${ap.checkpoints.length} checkpoints open · ${fmtTime(now, tz)} ${abbr} · updated ${ago(w.updated)} ${srcBadge(w.source)}</p>
+      </section>
+      <div class="cols">
+        <section class="card">
+          <div class="card-h"><h2>All checkpoints</h2><div class="seg-ctl" role="group" aria-label="Lane">${["std", "pre", "clear"].map(l => `<button data-aplane="${l}" aria-pressed="${lane === l}">${laneShort(l)}</button>`).join("")}</div></div>
+          <div class="cps">${ap.checkpoints.map(c => { const cw = w.checkpoints.find(x => x.id === c.id); const v = cw.lanes[lane]; const sel = c.id === state.apCp; return `
+            <button class="cp ${sel ? "rec" : ""} ${cw.open ? "" : "closed"}" data-apcp="${c.id}" aria-pressed="${sel}">
+              <div><div class="nm">${esc(c.name)}</div><div class="meta">${cw.open ? `Open until ${c.hours[1] >= 24 ? "midnight" : fmtH(c.hours[1])} · ${c.lanes.map(laneShort).join(", ")}` : `Opens ${fmtH(c.hours[0])}`}</div></div>
+              <div class="tot">${cw.open ? (v ? `<b>${v.min}</b><small>min ${laneShort(lane)} ${v.trend > 0 ? "▲ rising" : v.trend < 0 ? "▼ falling" : "steady"}</small>` : `<b>—</b><small>no ${laneShort(lane)} lane</small>`) : `<b>—</b>`}</div>
+            </button>`; }).join("")}</div>
+        </section>
+        <div class="right stack">
+          <section class="card">
+            <div class="card-h"><h2>${esc(cp.name.split(" · ").pop())}</h2><span class="small muted">${laneShort(laneUsed || lane)} lane · today</span></div>
+            <svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Typical wait through the day with the live reading">
+              ${yt.map(v => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/><text x="${L - 6}" y="${(y(v) + 4).toFixed(1)}" text-anchor="end">${v}</text>`).join("")}
+              ${best ? `<rect class="band" x="${x(best.h)}" y="${T}" width="${x(best.h + 1) - x(best.h)}" height="${H - T - B}"/>` : ""}
+              <path class="area" d="${area}"/><path class="curve" d="${path}"/>
+              <line class="nowline" x1="${x(hour).toFixed(1)}" x2="${x(hour).toFixed(1)}" y1="${T}" y2="${H - B}"/>
+              ${liveV != null ? `<circle class="livept" cx="${x(hour).toFixed(1)}" cy="${y(liveV).toFixed(1)}" r="5"/>` : ""}
+              ${ticks.map(h => `<text x="${x(h).toFixed(1)}" y="${H - 10}" text-anchor="middle">${h === 24 ? "12a" : h === 0 ? "12a" : h === 12 ? "12p" : h > 12 ? (h - 12) + "p" : h + "a"}</text>`).join("")}
+            </svg>
+            <div class="kv" style="margin-top:12px">
+              <div class="tile"><div class="k">Right now</div><div class="v">${liveV == null ? "—" : liveV + " <small>min</small>"}</div></div>
+              <div class="tile"><div class="k">Typical at this hour</div><div class="v">${(() => { const v = simLaneWait(code, cp, now, laneUsed || "std", false); return v == null ? "—" : Math.round(v) + " <small>min</small>"; })()}</div></div>
+              <div class="tile"><div class="k">Calmest next 6 h</div><div class="v">${best ? `${fmtH(best.h)} <small>~${Math.round(best.avg)} min</small>` : "—"}</div></div>
+              <div class="tile"><div class="k">Busiest today</div><div class="v">${busiest ? `${fmtH(busiest.h)} <small>~${Math.round(busiest.v)} min</small>` : "—"}</div></div>
+            </div>
+            <p class="small muted" style="margin-top:10px">Curve is the typical pattern for a ${["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][tzParts(now, tz).dow]}; the yellow point is the current reading. The green band is the calmest hour coming up.</p>
+          </section>
+          <section class="card"><div class="card-h"><h2>Flying from ${code}?</h2></div>
+            <form id="apsearch" style="display:flex;gap:8px"><label class="sr" for="apq">Flight number</label><input id="apq" class="mono" placeholder="Flight number" style="flex:1;min-width:0;border:1px solid var(--line-2);border-radius:6px;padding:8px 10px;background:var(--surface);text-transform:uppercase"><button class="btn primary" type="submit">Plan my leave-by</button></form>
+          </section>
+        </div>
+      </div>
+    </div>`;
+  $("#apsearch").addEventListener("submit", e => { e.preventDefault(); goSearch($("#apq").value); });
+}
+
+/* ---------- Events ---------- */
+document.addEventListener("click", e => {
+  const nav = e.target.closest("[data-nav]"); if (nav) { navigate(nav.dataset.nav); return; }
+  const day = e.target.closest("[data-day]"); if (day) { prefs.day = day.dataset.day; savePrefs(); renderHome(); return; }
+  const lane = e.target.closest("[data-lane]");
+  if (lane) { const l = lane.dataset.lane; prefs.lane = prefs.lane === l && lane.classList.contains("chip") ? "std" : l; savePrefs(); replan(); if (state.route === "#/" || state.route === "") renderHome(); return; }
+  const tr = e.target.closest("[data-travel]"); if (tr) { prefs.travel = clamp(prefs.travel + +tr.dataset.travel, 5, 180); savePrefs(); replan(); return; }
+  const bf = e.target.closest("[data-buffer]"); if (bf) { prefs.buffer = clamp(prefs.buffer + +bf.dataset.buffer, 0, 60); savePrefs(); replan(); return; }
+  const bag = e.target.closest("[data-bag]"); if (bag) { prefs.bag = !prefs.bag; savePrefs(); replan(); return; }
+  const cp = e.target.closest("[data-cp]"); if (cp) { state.forcedCp = state.forcedCp === cp.dataset.cp ? null : cp.dataset.cp; replan(); return; }
+  const apcp = e.target.closest("[data-apcp]"); if (apcp) { state.apCp = apcp.dataset.apcp; renderAirport(); return; }
+  const apl = e.target.closest("[data-aplane]"); if (apl) { state.apLane = apl.dataset.aplane; renderAirport(); return; }
+});
+function replan() { if (state.flight && state.waits && /^#\/flight\//.test(state.route)) { state.plan = computePlan(state.flight, state.waits, prefs, state.forcedCp); state.snapshot = snap(state.plan); renderFlight(); } }
+$("#topsearch").addEventListener("submit", e => { e.preventDefault(); goSearch($("#q").value); $("#q").value = ""; });
+
+let toastT; function toast(msg) { let el = $(".toast"); if (!el) { el = document.createElement("div"); el.className = "toast"; document.body.appendChild(el); } el.textContent = msg; clearTimeout(toastT); toastT = setTimeout(() => el.remove(), 3200); }
+function tickClock() { const el = $("#clock"); if (el) el.textContent = new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" }).format(new Date()); }
+setInterval(tickClock, 1000); tickClock();
+// Keep relative labels ("in 12 min", "updated 40s ago") honest without a data refresh.
+setInterval(() => { if (/^#\/flight\//.test(state.route) && state.plan && !state.loading) { state.plan = computePlan(state.flight, state.waits, prefs, state.forcedCp); renderFlight(); } }, 60000);
+
+route();
+})();
+</script>
