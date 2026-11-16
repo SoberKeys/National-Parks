@@ -24,6 +24,18 @@ leave by ──► curb ──► (bag drop) ──► checkpoint wait ──►
   are surfaced as a feed, and the leave-by time moves with them.
 - **Airport view.** All checkpoints, today's typical wait curve, the live
   reading, and the calmest hour coming up.
+- **My trips.** Save a flight and the home screen shows it with a live verdict
+  and leave-by time, re-planned every minute.
+- **Getting there.** Drop-off or rideshare, drive and park, or transit, each
+  adding its own steps to the plan.
+- **Alerts.** Browser notifications 30 min before leave-by, at leave-by, and
+  whenever a delay, gate change or wait swing moves the plan.
+- **Beat the peak.** When leaving 30 or 60 min earlier would dodge a security
+  peak and save real time in line, the verdict says so.
+- **Share a plan.** One link carries the flight plus your lane, travel time,
+  bag and buffer settings.
+- **Demo controls.** Push the departure back, change the gate or spike
+  security waits to watch the plan and the change feed react.
 
 ## Run it
 
@@ -33,7 +45,17 @@ cp .env.example .env     # optional: add provider keys
 node server.mjs          # http://localhost:3131
 ```
 
-No dependencies. Node 18 or newer.
+No dependencies. Node 18 or newer. `npm test` runs the planning-logic tests.
+
+```
+public/
+  index.html   markup and font links
+  styles.css   design tokens, light and dark themes, components
+  core.js      airport models, simulation, and computePlan (no DOM)
+  app.js       routing, rendering, events, notifications
+server.mjs     static server plus /api/flight and /api/waits adapters
+test/          node:test suite over core.js
+```
 
 With no keys the whole app runs on a built-in simulation: real airport layouts
 (checkpoints, lanes, hours, walk times to each concourse) driven by daily wait
@@ -78,15 +100,26 @@ omits fall back to the model, marked *estimated*.
 
 ## Modeled airports
 
-SFO, ORD, ATL, DEN, LAX, JFK, SEA, DFW, BOS, MIA have full checkpoint models
-(names, lanes, hours, walk minutes to each concourse, numeric-gate ranges for
-LAX and JFK). Adding an airport is one entry in `AIRPORTS` in `public/index.html`.
+27 US airports have checkpoint models: SFO, ORD, ATL, DEN, LAX, JFK, SEA, DFW,
+BOS, MIA, LAS, MCO, EWR, PHX, IAH, MSP, DCA, AUS, SAN, CLT, DTW, PHL, SLC,
+FLL, BWI, IAD, MDW. Each lists checkpoint names, lanes, hours, walk minutes to
+each concourse and, where gates are plain numbers, the number ranges per
+concourse. Checkpoint names follow the airports' own signage; hours and walk
+minutes are working estimates to be verified per airport before launch.
+Adding an airport is one entry in `AIRPORTS` in `public/core.js`.
+
+## Share links
+
+`#/flight/UA1523/today?lane=pre&mode=park&travel=40&bag=1&buffer=15` opens the
+flight with those settings applied and saved, then drops them from the URL.
 
 ## Assumptions in the plan
 
 | Step | Default |
 |---|---|
 | Curb to checkpoint | 8 min |
+| Drive and park | +12 min garage or shuttle to the terminal |
+| Transit | +6 min platform to the terminal |
 | Bag drop | 12 min, counters close 45 min before departure (60 international) |
 | Boarding begins | 40 min before departure (60 international, 30 Southwest) |
 | Door closes | 15 min before departure (20 international) |
